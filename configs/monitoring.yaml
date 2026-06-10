@@ -1,0 +1,23 @@
+thresholds:
+  data_drift_threshold: 0.20
+  prediction_drift_threshold: 0.20
+  confidence_drift_threshold: 0.10
+  performance_drop_threshold: 0.05
+  yellow_threshold: 0.40
+  red_threshold: 0.70
+retraining:
+  monthly_retraining_day: 1
+  retraining_cooldown_days: 30
+  drift_trigger_threshold: 0.60
+outputs:
+  artifact_dir: artifacts/monitoring
+  prediction_log_path: artifacts/monitoring/predictions.csv
+  drift_report_path: artifacts/monitoring/drift_report.json
+  confidence_report_path: artifacts/monitoring/confidence_report.json
+  health_report_path: artifacts/monitoring/health_report.json
+  confidence_plot_path: artifacts/monitoring/confidence_trend.png
+  prediction_plot_path: artifacts/monitoring/prediction_distribution.png
+  drift_plot_path: artifacts/monitoring/drift_trend.png
+confidence_bins: 10
+reference_window_size: 500
+production_window_size: 500

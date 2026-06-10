@@ -1,0 +1,15 @@
+trust_score_weights:
+  confidence: 0.5
+  evidence: 0.3
+  source_trust: 0.2
+artifact_dir: artifacts/explainability
+top_k_tokens: 8
+max_misclassified_samples: 200
+source_trust_scores:
+  Reuters: 1.0
+  "AP News": 1.0
+  BBC: 0.95
+  CNN: 0.85
+  Fox News: 0.7
+  "The New York Times": 0.95
+  The Guardian: 0.9

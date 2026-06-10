@@ -1,0 +1,40 @@
+{
+  "original_prediction": "fake",
+  "original_confidence": 0.89,
+  "adversarial_results": [
+    {
+      "name": "spelling_noise",
+      "prediction": "fake",
+      "confidence": 0.89
+    },
+    {
+      "name": "uppercase",
+      "prediction": "fake",
+      "confidence": 0.89
+    },
+    {
+      "name": "repeated_punctuation",
+      "prediction": "fake",
+      "confidence": 0.89
+    },
+    {
+      "name": "shortened",
+      "prediction": "fake",
+      "confidence": 0.89
+    },
+    {
+      "name": "out_of_domain",
+      "prediction": "real",
+      "confidence": 0.42
+    },
+    {
+      "name": "noisy_spacing",
+      "prediction": "fake",
+      "confidence": 0.89
+    }
+  ],
+  "prediction_flip_rate": 0.1667,
+  "average_confidence_drop": 0.0783,
+  "worst_case_confidence_drop": 0.47,
+  "robustness_score": 0.7617
+}

@@ -1,0 +1,7 @@
+
+[dev]
+pytest
+pytest-cov
+ruff
+black
+mypy

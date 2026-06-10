@@ -1,0 +1,31 @@
+providers:
+  default: tavily
+  tavily:
+    api_url: https://api.tavily.com/search
+    max_results: 5
+  serpapi:
+    enabled: false
+  bing:
+    enabled: false
+  google:
+    enabled: false
+thresholds:
+  min_trust_score: 0.5
+  min_relevance_score: 0.35
+  top_k: 5
+trust_scores:
+  Reuters: 1.0
+  "AP News": 1.0
+  BBC: 0.95
+  CNN: 0.85
+  Fox News: 0.7
+  "The New York Times": 0.95
+  The Guardian: 0.9
+ranking_weights:
+  semantic_similarity: 0.5
+  source_trust: 0.3
+  provider_relevance: 0.2
+search:
+  request_timeout_seconds: 15
+  user_agent: "FakeNewsDetectionBot/1.0"
+  max_queries: 4

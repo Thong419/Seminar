@@ -1,0 +1,81 @@
+Metadata-Version: 2.4
+Name: fake-news-misinformation-detection
+Version: 0.1.0
+Summary: Fake News & Misinformation Detection System
+Requires-Python: >=3.12
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: pytest-cov; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: black; extra == "dev"
+Requires-Dist: mypy; extra == "dev"
+
+# Fake News & Misinformation Detection System
+
+Production-oriented scaffold for a university NLP project that detects real versus fake news, retrieves supporting evidence, and exposes the system through a FastAPI backend and Streamlit frontend.
+
+## What is in this scaffold
+
+- Clean project layout with separate areas for API, agents, data, features, training, inference, evaluation, explainability, monitoring, utilities, and config.
+- Deployment skeleton for Docker and Docker Compose.
+- Configuration and packaging metadata for Python 3.12+.
+- Test directory structure ready for API, agents, training, and inference coverage.
+
+## Planned architecture
+
+Frontend: Streamlit
+
+Backend: FastAPI
+
+Modeling: PyTorch, HuggingFace Transformers, TF-IDF, Logistic Regression, RoBERTa-base
+
+Tracking and tuning: MLflow, Optuna
+
+Explainability: SHAP
+
+Agent layer: LangGraph
+
+Deployment: Docker
+
+## Repository layout
+
+- `src/api/`: FastAPI entrypoints and request/response contracts.
+- `src/agents/`: agent orchestration and reasoning workflow.
+- `src/data/`: data loading and preprocessing utilities.
+- `src/features/`: feature engineering and vectorization logic.
+- `src/training/`: training pipeline and experiment code.
+- `src/inference/`: model loading and prediction services.
+- `src/evaluation/`: metric computation and evaluation reports.
+- `src/explainability/`: explanation and interpretability hooks.
+- `src/monitoring/`: logging, drift, and retraining signals.
+- `src/utils/`: shared helpers such as logging and validation.
+- `src/config/`: typed configuration access.
+- `configs/`: YAML configuration files.
+- `data/`: raw, processed, and external datasets.
+- `models/`: persisted baseline and transformer artifacts.
+- `tests/`: unit and integration test structure.
+- `frontend/`: Streamlit application.
+- `docker/`: supporting container assets.
+
+## Development status
+
+This repository currently contains architecture scaffolding only. Business logic, training code, agent workflows, API endpoints, and UI flows will be added in the next phase after approval.
+
+## Next implementation phase
+
+1. Define typed config objects and YAML loading.
+2. Add the FastAPI app factory and health endpoint.
+3. Add the Streamlit shell for article submission and result display.
+4. Add the training pipeline interfaces for baseline and RoBERTa workflows.
+5. Add the LangGraph agent skeleton for classification, retrieval, analysis, and decision steps.
+
+## Phase 2
+
+The Phase 2 pipeline now includes dataset loading, validation, preprocessing, splitting, TF-IDF feature extraction, baseline training, evaluation artifact persistence, and MLflow logging hooks.
+
+### Example training command
+
+```bash
+python -m src.training.train_baseline
+```

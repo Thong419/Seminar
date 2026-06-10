@@ -1,0 +1,16 @@
+experiment_name: fake_news_baseline
+model_output_dir: models/baseline
+mlflow_tracking_uri: http://localhost:5000
+dataset_version: "1.0"
+random_state: 42
+tfidf:
+  max_features: 20000
+  ngram_range: [1, 2]
+  min_df: 2
+  max_df: 0.95
+  sublinear_tf: true
+logistic_regression:
+  C: 1.0
+  max_iter: 1000
+  solver: liblinear
+  class_weight: balanced

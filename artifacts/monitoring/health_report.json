@@ -1,0 +1,13 @@
+{
+  "status": "YELLOW",
+  "indicators": {
+    "data_drift_score": 0.5329,
+    "prediction_drift_score": 0.4047,
+    "confidence_drift_score": 0.202,
+    "performance_drop": 0.0575
+  },
+  "alerts": [
+    "At least one monitoring signal crossed the yellow threshold.",
+    "Model performance is degrading relative to baseline metrics."
+  ]
+}

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <rect width="1400" height="900" fill="#ffffff"/>
+  <rect x="60" y="50" width="1280" height="110" rx="24" fill="#0f172a"/>
+  <text x="100" y="112" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">Model Information</text>
+  <g fill="#f8fafc" stroke="#dbe4ee">
+    <rect x="60" y="200" width="300" height="150" rx="20"/>
+    <rect x="390" y="200" width="300" height="150" rx="20"/>
+    <rect x="720" y="200" width="300" height="150" rx="20"/>
+    <rect x="1050" y="200" width="290" height="150" rx="20"/>
+  </g>
+  <text x="95" y="265" fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="700">roberta-base</text>
+  <text x="95" y="300" fill="#475569" font-family="Arial, sans-serif" font-size="18">Dataset: fakenewsnet</text>
+  <text x="425" y="265" fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="700">Accuracy</text>
+  <text x="425" y="300" fill="#475569" font-family="Arial, sans-serif" font-size="18">N/A</text>
+  <text x="755" y="265" fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="700">Precision</text>
+  <text x="755" y="300" fill="#475569" font-family="Arial, sans-serif" font-size="18">N/A</text>
+  <text x="1085" y="265" fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="700">Recall</text>
+  <text x="1085" y="300" fill="#475569" font-family="Arial, sans-serif" font-size="18">N/A</text>
+  <rect x="60" y="400" width="1280" height="420" rx="24" fill="#f8fafc" stroke="#dbe4ee"/>
+  <text x="100" y="465" fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="700">Metrics loaded from artifacts when available</text>
+</svg>

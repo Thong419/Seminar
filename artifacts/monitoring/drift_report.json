@@ -1,0 +1,51 @@
+{
+  "reference_sample_size": 3,
+  "production_sample_size": 3,
+  "length_mean_shift": 0.3333,
+  "vocabulary_js_divergence": 0.7209,
+  "token_frequency_tvd": 0.7667,
+  "drift_score": 0.5329,
+  "status": "YELLOW",
+  "top_changed_tokens": [
+    {
+      "token": "the",
+      "delta": 0.14022988505747125
+    },
+    {
+      "token": "verified",
+      "delta": 0.06896551724137931
+    },
+    {
+      "token": "hidden",
+      "delta": 0.06666666666666667
+    },
+    {
+      "token": "evidence",
+      "delta": 0.06666666666666667
+    },
+    {
+      "token": "cure",
+      "delta": 0.06666666666666667
+    },
+    {
+      "token": "after",
+      "delta": 0.034482758620689655
+    },
+    {
+      "token": "explains",
+      "delta": 0.034482758620689655
+    },
+    {
+      "token": "government",
+      "delta": 0.034482758620689655
+    },
+    {
+      "token": "reuters",
+      "delta": 0.034482758620689655
+    },
+    {
+      "token": "eyewitnesses",
+      "delta": 0.034482758620689655
+    }
+  ]
+}

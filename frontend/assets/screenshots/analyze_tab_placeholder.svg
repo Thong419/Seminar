@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+  <rect width="1400" height="900" fill="#f8fafc"/>
+  <rect x="60" y="50" width="1280" height="110" rx="24" fill="#111827"/>
+  <text x="100" y="112" fill="#ffffff" font-family="Arial, sans-serif" font-size="34" font-weight="700">Fake News &amp; Misinformation Detection System</text>
+  <rect x="60" y="190" width="1280" height="220" rx="24" fill="#ffffff" stroke="#dbe4ee"/>
+  <text x="100" y="245" fill="#0f172a" font-family="Arial, sans-serif" font-size="26" font-weight="700">Analyze Article</text>
+  <rect x="100" y="280" width="1200" height="90" rx="18" fill="#f1f5f9" stroke="#cbd5e1"/>
+  <text x="130" y="332" fill="#64748b" font-family="Arial, sans-serif" font-size="22">Paste article text here...</text>
+  <rect x="60" y="440" width="1280" height="400" rx="24" fill="#ffffff" stroke="#dbe4ee"/>
+  <text x="100" y="495" fill="#0f172a" font-family="Arial, sans-serif" font-size="24" font-weight="700">Results</text>
+  <rect x="100" y="540" width="250" height="110" rx="20" fill="#dcfce7"/>
+  <text x="140" y="598" fill="#166534" font-family="Arial, sans-serif" font-size="30" font-weight="700">FAKE</text>
+  <rect x="390" y="540" width="250" height="110" rx="20" fill="#ecfeff"/>
+  <text x="430" y="598" fill="#155e75" font-family="Arial, sans-serif" font-size="30" font-weight="700">91% Confidence</text>
+  <rect x="680" y="540" width="250" height="110" rx="20" fill="#fff7ed"/>
+  <text x="720" y="598" fill="#9a3412" font-family="Arial, sans-serif" font-size="30" font-weight="700">Trust 88/100</text>
+</svg>

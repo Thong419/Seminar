@@ -1,0 +1,11 @@
+{
+  "should_retrain": true,
+  "strategy": "drift_triggered",
+  "priority": "medium",
+  "reasons": [
+    "At least one monitoring signal crossed the yellow threshold.",
+    "Model performance is degrading relative to baseline metrics.",
+    "It has been 40 days since the last retraining cycle."
+  ],
+  "next_review_date": "2026-07-10"
+}

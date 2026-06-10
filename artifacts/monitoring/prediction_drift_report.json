@@ -1,0 +1,12 @@
+{
+  "reference_fake_ratio": 0.2,
+  "production_fake_ratio": 0.8,
+  "decision_distribution": {
+    "fake": 4,
+    "real": 1
+  },
+  "trust_score_mean": 48.6,
+  "trust_score_std": 17.9399,
+  "drift_score": 0.4047,
+  "status": "YELLOW"
+}

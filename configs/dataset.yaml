@@ -1,0 +1,23 @@
+name: fakenewsnet
+version: "1.0"
+source_type: local
+source_path: data/raw/fakenewsnet.csv
+file_format: csv
+text_column: text
+label_column: label
+allowed_labels:
+  - fake
+  - real
+split:
+  train_size: 0.7
+  validation_size: 0.15
+  test_size: 0.15
+  random_state: 42
+  stratify: true
+preprocessing:
+  lowercase: true
+  remove_urls: true
+  remove_html: true
+  remove_whitespace: true
+  remove_special_characters: true
+  special_characters_pattern: '[^a-zA-Z0-9\s]'
