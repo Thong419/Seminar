@@ -11,7 +11,7 @@ from src.agent.classifier_tool import ClassifierTool
 from src.agent.decision_tool import DecisionTool
 from src.agent.evidence_tool import EvidenceTool
 from src.agent.trace import AgentTrace, ToolTrace
-from src.agents.state import EvidenceItem, ReviewState
+from src.agent.state import EvidenceItem, ReviewState
 from src.config.pipeline import ModelConfig
 from src.explainability.explainer import ExplainabilityService
 from src.inference.predictor import Predictor

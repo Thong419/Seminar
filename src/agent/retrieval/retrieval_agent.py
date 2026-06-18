@@ -6,7 +6,7 @@ from dataclasses import dataclass
 import os
 from pathlib import Path
 
-from src.agents.state import EvidenceItem
+from src.agent.state import EvidenceItem
 from src.retrieval.document_fetcher import DocumentFetcher
 from src.retrieval.pipeline import EvidenceRetrievalPipeline
 from src.retrieval.search_client import BingHtmlSearchClient, HybridSearchClient, SearchClient, TavilySearchClient, WikipediaHtmlSearchClient

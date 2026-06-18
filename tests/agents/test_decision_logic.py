@@ -1,5 +1,5 @@
-from src.agents.decision.decision_agent import DecisionAgent
-from src.agents.state import AgentConfig, Verdict
+from src.agent.decision.decision_agent import DecisionAgent
+from src.agent.state import AgentConfig, Verdict
 
 
 def test_decision_agent_returns_confirmed_fake_on_strong_fake_signals() -> None:

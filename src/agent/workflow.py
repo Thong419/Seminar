@@ -6,11 +6,11 @@ from dataclasses import dataclass
 
 from langgraph.graph import END, START, StateGraph
 
-from src.agents.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
-from src.agents.classification.classification_agent import ClassificationAgent
-from src.agents.decision.decision_agent import DecisionAgent
-from src.agents.explanation.explanation_agent import ExplanationAgent
-from src.agents.nodes import (
+from src.agent.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
+from src.agent.classification.classification_agent import ClassificationAgent
+from src.agent.decision.decision_agent import DecisionAgent
+from src.agent.explanation.explanation_agent import ExplanationAgent
+from src.agent.nodes import (
     AgentNodes,
     analyze_evidence,
     classify,
@@ -19,8 +19,8 @@ from src.agents.nodes import (
     make_decision,
     retrieve_evidence,
 )
-from src.agents.retrieval.retrieval_agent import RetrievalAgent
-from src.agents.state import AgentConfig, AgentState
+from src.agent.retrieval.retrieval_agent import RetrievalAgent
+from src.agent.state import AgentConfig, AgentState
 
 
 @dataclass(frozen=True, slots=True)

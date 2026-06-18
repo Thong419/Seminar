@@ -12,8 +12,8 @@ from pathlib import Path
 from statistics import fmean
 from typing import Any
 
-from src.agents.retrieval.retrieval_agent import RetrievalAgent
-from src.agents.state import EvidenceItem
+from src.agent.retrieval.retrieval_agent import RetrievalAgent
+from src.agent.state import EvidenceItem
 from src.retrieval.document_fetcher import DocumentFetcher
 from src.retrieval.search_client import BingHtmlSearchClient, HybridSearchClient, SearchClient, TavilySearchClient, WikipediaHtmlSearchClient
 

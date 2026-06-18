@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from src.agents.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
-from src.agents.classification.classification_agent import ClassificationAgent
-from src.agents.decision.decision_agent import DecisionAgent
-from src.agents.explanation.explanation_agent import ExplanationAgent, ExplanationContext
-from src.agents.retrieval.retrieval_agent import RetrievalAgent
-from src.agents.state import AgentConfig, AgentState, Verdict
+from src.agent.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
+from src.agent.classification.classification_agent import ClassificationAgent
+from src.agent.decision.decision_agent import DecisionAgent
+from src.agent.explanation.explanation_agent import ExplanationAgent, ExplanationContext
+from src.agent.retrieval.retrieval_agent import RetrievalAgent
+from src.agent.state import AgentConfig, AgentState, Verdict
 
 
 @dataclass(frozen=True, slots=True)

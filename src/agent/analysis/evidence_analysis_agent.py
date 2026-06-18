@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from src.agents.state import EvidenceItem
+from src.agent.state import EvidenceItem
 
 
 @dataclass(frozen=True, slots=True)

@@ -1,4 +1,4 @@
-from src.agents.state import EvidenceItem
+from src.agent.state import EvidenceItem
 from src.explainability.explanation_formatter import TrustScoreWeights, format_explanation
 
 

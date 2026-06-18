@@ -1,12 +1,12 @@
 from pathlib import Path
 
-from src.agents.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
-from src.agents.classification.classification_agent import ClassificationAgent, ClassificationResult
-from src.agents.decision.decision_agent import DecisionAgent
-from src.agents.explanation.explanation_agent import ExplanationAgent
-from src.agents.retrieval.retrieval_agent import RetrievalAgent
-from src.agents.state import AgentConfig
-from src.agents.workflow import AgenticWorkflow
+from src.agent.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
+from src.agent.classification.classification_agent import ClassificationAgent, ClassificationResult
+from src.agent.decision.decision_agent import DecisionAgent
+from src.agent.explanation.explanation_agent import ExplanationAgent
+from src.agent.retrieval.retrieval_agent import RetrievalAgent
+from src.agent.state import AgentConfig
+from src.agent.workflow import AgenticWorkflow
 from src.config.pipeline import ModelConfig
 from src.retrieval.document_fetcher import EvidenceDocument
 from src.retrieval.search_client import SearchResult

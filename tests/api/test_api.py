@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi.testclient import TestClient
 
-from src.agents.state import EvidenceItem
+from src.agent.state import EvidenceItem
 from src.api.dependencies import get_predictor, get_workflow
 from src.api.main import create_app
 

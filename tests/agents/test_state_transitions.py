@@ -1,5 +1,5 @@
-from src.agents.nodes import confidence_check
-from src.agents.state import AgentConfig, AgentState
+from src.agent.nodes import confidence_check
+from src.agent.state import AgentConfig, AgentState
 
 
 def test_confidence_check_skips_retrieval_above_threshold() -> None:

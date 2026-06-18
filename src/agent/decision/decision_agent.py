@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from src.agents.state import AgentConfig, Verdict
+from src.agent.state import AgentConfig, Verdict
 
 
 @dataclass(frozen=True, slots=True)

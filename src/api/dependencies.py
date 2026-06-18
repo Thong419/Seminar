@@ -13,7 +13,7 @@ from src.config.settings import AppSettings, get_settings
 
 if TYPE_CHECKING:
     from src.agent.controller import AgentController
-    from src.agents.workflow import AgenticWorkflow
+    from src.agent.workflow import AgenticWorkflow
     from src.inference.predictor import Predictor
     from src.monitoring.monitor import MonitoringService
 
@@ -56,13 +56,13 @@ def get_workflow() -> AgenticWorkflow:
     settings = get_settings()
     model_config = get_model_config()
     try:
-        from src.agents.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
-        from src.agents.classification.classification_agent import ClassificationAgent
-        from src.agents.decision.decision_agent import DecisionAgent
-        from src.agents.explanation.explanation_agent import ExplanationAgent
-        from src.agents.retrieval.retrieval_agent import RetrievalAgent
-        from src.agents.state import AgentConfig
-        from src.agents.workflow import AgenticWorkflow
+        from src.agent.analysis.evidence_analysis_agent import EvidenceAnalysisAgent
+        from src.agent.classification.classification_agent import ClassificationAgent
+        from src.agent.decision.decision_agent import DecisionAgent
+        from src.agent.explanation.explanation_agent import ExplanationAgent
+        from src.agent.retrieval.retrieval_agent import RetrievalAgent
+        from src.agent.state import AgentConfig
+        from src.agent.workflow import AgenticWorkflow
 
         predictor = get_predictor()
         classifier = ClassificationAgent(predictor=predictor, model_config=model_config)

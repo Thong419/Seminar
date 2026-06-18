@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from src.agents.state import EvidenceItem, Verdict
+from src.agent.state import EvidenceItem, Verdict
 from src.config.pipeline import ModelConfig
 from src.explainability import (
     SHAPExplainer,

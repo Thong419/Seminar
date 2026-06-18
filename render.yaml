@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: seminar-fakenews-api
+    runtime: python
+    plan: free
+    rootDir: .
+    buildCommand: pip install -r requirements-deploy.txt
+    startCommand: uvicorn src.api.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: API_HOST
+        value: 0.0.0.0
+      - key: MODEL_NAME
+        value: roberta-base
+      - key: MODEL_DIR
+        value: models/roberta

@@ -21,7 +21,7 @@ from src.privacy.pii_masker import mask_pii
 
 if TYPE_CHECKING:
     from src.agent.controller import AgentController
-    from src.agents.workflow import AgenticWorkflow
+    from src.agent.workflow import AgenticWorkflow
     from src.inference.predictor import Predictor
     from src.monitoring.monitor import MonitoringService
 

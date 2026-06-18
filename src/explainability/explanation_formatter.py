@@ -10,7 +10,7 @@ from typing import Any
 import pandas as pd
 import yaml
 
-from src.agents.state import EvidenceItem, Verdict
+from src.agent.state import EvidenceItem, Verdict
 from src.explainability.token_importance import save_token_importance
 
 
