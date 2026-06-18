@@ -111,6 +111,7 @@ class ModelConfig:
     max_length: int = 512
     num_labels: int = 2
     model_output_dir: Path = Path("models/roberta")
+    model_reference: str = "models/roberta"
     label_names: tuple[str, str] = ("fake", "real")
     tokenizer_name: str = "roberta-base"
     use_fast_tokenizer: bool = True

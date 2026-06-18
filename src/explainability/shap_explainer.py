@@ -42,12 +42,13 @@ class SHAPExplainer:
 
     def _load_model(self) -> tuple[Any, Any]:
         if self._model is None or self._tokenizer is None:
+            model_source = getattr(self.model_config, "model_reference", None) or self.model_config.model_output_dir
             self._tokenizer = AutoTokenizer.from_pretrained(
-                self.model_config.model_output_dir,
+                model_source,
                 use_fast=self.model_config.use_fast_tokenizer,
             )
             self._model = AutoModelForSequenceClassification.from_pretrained(
-                self.model_config.model_output_dir
+                model_source
             )
             self._model.to(self.device)
             self._model.eval()

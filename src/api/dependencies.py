@@ -35,6 +35,7 @@ def get_model_config() -> ModelConfig:
     return ModelConfig(
         name=settings.model_name,
         model_output_dir=settings.model_dir,
+        model_reference=settings.model_reference,
         tokenizer_name=settings.model_name,
     )
 
