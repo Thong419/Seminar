@@ -4,10 +4,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, asdict
 import re
+import logging
 from pathlib import Path
 from typing import Iterable, Sequence
 import json
 
+
+LOGGER = logging.getLogger(__name__)
 
 SPECIAL_TOKEN_PATTERN = re.compile(r"^\s*$|^<[^>]+>$|^\[.*\]$")
 
@@ -26,11 +29,28 @@ def extract_token_importance(
     values: Sequence[float],
     top_k: int = 8,
 ) -> list[dict[str, str | float]]:
-    if len(tokens) != len(values):
-        raise ValueError("Tokens and values must have the same length.")
+    token_list = [str(token) for token in tokens]
+    value_list = [float(value) for value in values]
+    LOGGER.debug(
+        "extract_token_importance received token_count=%s value_count=%s top_k=%s",
+        len(token_list),
+        len(value_list),
+        top_k,
+    )
+    if len(token_list) != len(value_list):
+        LOGGER.warning(
+            "Token/value length mismatch detected; truncating to shared length. token_count=%s value_count=%s",
+            len(token_list),
+            len(value_list),
+        )
+        shared_length = min(len(token_list), len(value_list))
+        token_list = token_list[:shared_length]
+        value_list = value_list[:shared_length]
+
+    assert len(token_list) == len(value_list), "Tokens and values must have the same length."
 
     ranked: list[TokenImportance] = []
-    for token, value in zip(tokens, values, strict=True):
+    for token, value in zip(token_list, value_list, strict=True):
         normalized = _normalize_token(token)
         if not normalized:
             continue

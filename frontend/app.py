@@ -6,7 +6,13 @@ from pathlib import Path
 
 import streamlit as st
 
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from frontend.api_client import APIClient, APIError, ModelInfo
+from frontend.agent_result_view import render_agent_result
 from frontend.components.prediction_card import prediction_badge_color, prediction_badge_label
 from frontend.config import FrontendConfig, get_frontend_config, load_json, load_yaml
 from frontend.evidence_view import render_evidence_cards
@@ -55,6 +61,13 @@ def _render_badge(prediction: str) -> None:
     )
 
 
+def _clip_text(text: str, max_chars: int = 320) -> str:
+    compact = " ".join(str(text or "").split())
+    if len(compact) <= max_chars:
+        return compact
+    return f"{compact[:max_chars].rstrip()}..."
+
+
 def _render_architecture_diagram() -> None:
     st.markdown(
         """
@@ -76,23 +89,123 @@ def _render_architecture_diagram() -> None:
     )
 
 
+def _render_kv_list(title: str, values: list[str]) -> None:
+    st.markdown(f"**{title}**")
+    if not values:
+        st.caption("None")
+        return
+    for value in values:
+        st.markdown(f"- {value}")
+
+
+def _render_trace_timeline(trace: dict[str, object] | None, steps: list[dict[str, object]], total_execution_time: str) -> None:
+    st.markdown("### Trace Section")
+    st.caption("Agent Execution Timeline")
+    if trace is None:
+        st.info("No trace available.")
+        return
+
+    if not steps:
+        st.info("Trace captured but no tool steps were recorded.")
+        st.write(f"**Total execution time:** {total_execution_time}")
+        return
+
+    for step in steps:
+        tool_name = str(step.get("tool_name", "Tool"))
+        duration_ms = float(step.get("duration_ms", 0.0))
+        summary = str(step.get("summary", ""))
+        with st.container(border=True):
+            left, right = st.columns([2, 1])
+            with left:
+                st.markdown(f"**{int(step.get('step', 0))}. {tool_name}**")
+                st.write(summary)
+            with right:
+                st.metric("Duration", f"{duration_ms:.0f} ms")
+    st.write(f"**Total execution time:** {total_execution_time}")
+
+
+def _render_evidence_cards(items: list[dict[str, object]]) -> None:
+    st.markdown("### Evidence Cards")
+    for item in items:
+        title = str(item.get("title", "Untitled evidence"))
+        provider = str(item.get("source", item.get("provider", "Unknown")))
+        url = str(item.get("url", "")).strip()
+        trust_value = item.get("source_credibility", item.get("trust_score", "N/A"))
+        relevance_value = item.get("relevance_score", "N/A")
+        content = str(item.get("content", ""))
+        preview = _clip_text(content, max_chars=340)
+
+        with st.container(border=True):
+            st.markdown(f"**{title}**")
+            meta_left, meta_right = st.columns(2)
+            with meta_left:
+                st.write(f"**Provider:** {provider}")
+                st.write(f"**URL:** {url if url else 'N/A'}")
+            with meta_right:
+                if isinstance(trust_value, (int, float)):
+                    st.write(f"**Trust Score:** {float(trust_value):.2%}")
+                else:
+                    st.write(f"**Trust Score:** {trust_value}")
+                if isinstance(relevance_value, (int, float)):
+                    st.write(f"**Relevance:** {float(relevance_value):.2%}")
+                else:
+                    st.write(f"**Relevance:** {relevance_value}")
+
+            st.write(f"**Preview:** {preview}")
+
+            if content and len(" ".join(content.split())) > len(preview):
+                with st.expander("See More"):
+                    st.write(content)
+            elif content:
+                with st.expander("See More"):
+                    st.write(content)
+
+
 def main() -> None:
     config = get_frontend_config()
     api_client = APIClient(config)
 
     st.set_page_config(page_title=config.app_title, page_icon="📰", layout="wide")
+    screenshot_mode = st.toggle("Defense Screenshot Mode", value=False, help="Compact, clean layout for report and slide screenshots.")
+
+    top_padding = "1.0rem" if screenshot_mode else "2.0rem"
+    bottom_padding = "1.0rem" if screenshot_mode else "2.0rem"
+    section_gap = "0.45rem" if screenshot_mode else "0.9rem"
+
     st.markdown(
-        """
+        f"""
         <style>
-            .main { background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%); }
-            .block-container { padding-top: 2rem; padding-bottom: 2rem; }
-            .panel {
-                background: rgba(255,255,255,0.86);
-                border: 1px solid rgba(15, 23, 42, 0.08);
+            html, body, [class*="css"], [data-testid="stAppViewContainer"], [data-testid="stMarkdownContainer"] {{
+                font-family: "Segoe UI", "Noto Sans", "Inter", sans-serif;
+            }}
+            .main {{
+                background: linear-gradient(180deg, var(--background-color) 0%, var(--secondary-background-color) 100%);
+            }}
+            .block-container {{
+                padding-top: {top_padding};
+                padding-bottom: {bottom_padding};
+            }}
+            .panel {{
+                background: var(--secondary-background-color);
+                color: var(--text-color);
+                border: 1px solid rgba(128, 128, 128, 0.35);
                 border-radius: 18px;
                 padding: 1rem 1.1rem;
-                box-shadow: 0 20px 45px rgba(15, 23, 42, 0.05);
-            }
+                box-shadow: 0 10px 20px rgba(15, 23, 42, 0.06);
+            }}
+            .stTabs [data-baseweb="tab-list"] {{
+                gap: {section_gap};
+            }}
+            [data-testid="stMetricValue"] {{
+                color: var(--text-color);
+            }}
+            [data-testid="stMetricLabel"] {{
+                color: var(--text-color);
+            }}
+            .stCaption {{
+                color: var(--text-color);
+                opacity: 0.85;
+            }}
         </style>
         """,
         unsafe_allow_html=True,
@@ -132,8 +245,8 @@ def main() -> None:
                 st.error("Please enter article text before analyzing.")
             else:
                 try:
-                    with st.spinner("Calling backend analysis workflow..."):
-                        result = api_client.analyze(text_to_analyze)
+                    with st.spinner("Calling backend agent workflow..."):
+                        result = api_client.agent(text_to_analyze)
                     st.session_state["analysis_result"] = result
                 except APIError as exc:
                     if exc.code == "timeout":
@@ -147,45 +260,49 @@ def main() -> None:
 
         result = st.session_state.get("analysis_result")
         if result:
-            st.subheader("Results")
-            left, middle, right, decision = st.columns(4)
-            with left:
-                st.metric("Prediction", str(result.get("prediction", "uncertain")).upper())
-            with middle:
-                confidence = float(result.get("confidence", 0.0))
-                st.metric("Confidence", f"{confidence:.2%}")
-            with right:
-                trust_score = int(result.get("trust_score", 0))
-                st.metric("Trust Score", f"{trust_score}/100")
-            with decision:
-                st.metric("Final Decision", str(result.get("explanation_details", {}).get("final_decision", result.get("prediction", "uncertain")).replace("_", " ")).upper())
+            agent_summary = render_agent_result(result)
+            st.subheader("Agent Result Card")
+            result_left, result_middle, result_right = st.columns(3)
+            with result_left:
+                st.metric("Prediction", agent_summary["Prediction"])
+                st.metric("Confidence", agent_summary["Confidence"])
+            with result_middle:
+                st.metric("Trust Score", agent_summary["Trust Score"])
+                st.metric("Human Review State", agent_summary["Human Review State"])
+            with result_right:
+                st.metric("Conflict Flag", agent_summary["Conflict Flag"])
+                st.metric("Decision", str(result.get("human_review_state", result.get("prediction", "uncertain"))).replace("_", " ").upper())
 
-            st.markdown("### Prediction Badge")
-            _render_badge(str(result.get("prediction", "uncertain")))
+            st.markdown("### Decision Reason")
+            st.write(agent_summary["Decision Reason"])
 
-            trust_score = int(result.get("trust_score", 0))
-            st.markdown("### Trust Score")
-            st.progress(trust_progress(trust_score))
-            st.write(f"**{trust_score}/100** · {classify_trust_score(trust_score)}")
+            trust_score_100 = int(round(float(result.get("trust_score", 0.0)) * 100.0))
+            st.progress(trust_progress(trust_score_100))
+            st.caption(f"Trust interpretation: {classify_trust_score(trust_score_100)}")
 
-            st.markdown("### Important Tokens")
-            token_rows = result.get("important_tokens", []) or []
-            st.dataframe(token_rows, use_container_width=True, hide_index=True)
+            st.markdown("### Evidence Section")
+            evidence_left, evidence_right = st.columns(2)
+            with evidence_left:
+                _render_kv_list("Source Providers", agent_summary["Source Providers"])
+                st.markdown("**Support Score**")
+                st.write(f"{float(result.get('support_score', 0.0)):.2%}")
+                st.markdown("**Contradiction Score**")
+                st.write(f"{float(result.get('contradiction_score', 0.0)):.2%}")
+                st.markdown("**Evidence Quality**")
+                st.write(f"{float(result.get('evidence_quality_score', 0.0)):.2%}")
+            with evidence_right:
+                _render_kv_list("Top Evidence Titles", agent_summary["Evidence Titles"])
+                st.markdown("**Evidence Summary**")
+                st.write(agent_summary["Evidence Summary"])
 
-            st.markdown("### Evidence")
-            for item in render_evidence_cards(result.get("evidence", []) or []):
-                with st.container(border=True):
-                    st.markdown(f"**{item.get('title', 'Untitled evidence')}**")
-                    st.caption(f"Source: {item.get('source', 'Unknown')} · Trust: {item.get('trust_score', 'N/A')} · Relevance: {item.get('relevance_score', 'N/A')}")
-                    url = item.get("url")
-                    if url:
-                        st.link_button("Open source", str(url))
-                    st.write(str(item.get("content", "")))
+            _render_evidence_cards(render_evidence_cards(result.get("sources", []) or []))
 
-            st.markdown("### Explanation")
+            _render_trace_timeline(result.get("trace") if isinstance(result.get("trace"), dict) else None, agent_summary["Trace Steps"], agent_summary["Total Execution Time"])
+
+            st.markdown("### Explanation Section")
             evidence_summary, final_explanation = build_explanation_lines(
                 str(result.get("evidence_summary", "")),
-                str(result.get("final_explanation", "")),
+                str(result.get("explanation", result.get("final_explanation", ""))),
             )
             st.write(f"**Evidence summary:** {evidence_summary}")
             st.write(f"**Final explanation:** {final_explanation}")

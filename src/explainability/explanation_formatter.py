@@ -25,7 +25,7 @@ class TrustScoreWeights:
 class UnifiedExplanation:
     prediction: str
     confidence: float
-    trust_score: int
+    trust_score: float
     important_tokens: list[dict[str, str | float]]
     evidence_summary: str
     final_explanation: str
@@ -102,13 +102,16 @@ def format_explanation(
     source_trust: float,
     important_tokens: list[dict[str, str | float]],
     evidence: list[EvidenceItem],
-    weights: TrustScoreWeights,
+    weights: TrustScoreWeights = TrustScoreWeights(),
+    trust_score: float | None = None,
 ) -> UnifiedExplanation:
-    trust_score = calculate_trust_score(confidence, evidence_score, source_trust, weights)
+    if trust_score is None:
+        trust_score = calculate_trust_score(confidence, evidence_score, source_trust, weights) / 100.0
+    trust_score = max(0.0, min(1.0, float(trust_score)))
     evidence_summary = build_evidence_summary(evidence)
     final_explanation = (
         f"The article was classified as {prediction} with confidence {confidence:.2f}. "
-        f"Trust score: {trust_score}/100. "
+        f"Trust score: {trust_score:.2%}. "
         f"{evidence_summary} "
         f"The strongest token signals were {', '.join(item['token'] for item in important_tokens[:5]) or 'not available'}."
     )

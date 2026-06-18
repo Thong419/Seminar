@@ -24,9 +24,10 @@ class FrontendConfig:
 
 @lru_cache(maxsize=1)
 def get_frontend_config() -> FrontendConfig:
+    defaults = FrontendConfig()
     return FrontendConfig(
-        api_url=os.getenv("API_URL", FrontendConfig.api_url),
-        timeout_seconds=float(os.getenv("API_TIMEOUT_SECONDS", str(FrontendConfig.timeout_seconds))),
+        api_url=os.getenv("API_URL", defaults.api_url),
+        timeout_seconds=float(os.getenv("API_TIMEOUT_SECONDS", str(defaults.timeout_seconds))),
     )
 
 

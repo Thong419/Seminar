@@ -97,13 +97,14 @@ curl -X POST http://localhost:8000/analyze -H "Content-Type: application/json" -
 
 ## Screenshots
 
-Placeholder screenshots for the Streamlit app are available in `frontend/assets/screenshots/`.
+Presentation screenshots and UI captures are available in `docs/slides/images/`.
 
 ## Documentation
 
-- [Deployment guide](docs/deployment_guide.md)
-- [API reference](docs/api_reference.md)
-- [Architecture overview](docs/architecture_overview.md)
-- [Demo script](docs/demo_script.md)
-- [Project structure](docs/project_structure.md)
-- [Final checklist](docs/final_checklist.md)
+- [Final requirements matrix](docs/FINAL_REQUIREMENTS_MATRIX.md)
+- [Deployment guide](docs/DEPLOYMENT_GUIDE.md)
+- [Deployment verification](docs/DEPLOYMENT_VERIFICATION.md)
+- [UAT report](docs/UAT_REPORT.md)
+- [Final defense package](docs/FINAL_DEFENSE_PACKAGE.md)
+- [Final project readiness](docs/FINAL_PROJECT_READINESS.md)
+- [Agent sequence diagram](docs/AGENT_SEQUENCE_DIAGRAM.md)

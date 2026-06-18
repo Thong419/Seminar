@@ -48,6 +48,9 @@ class APIClient:
     def analyze(self, text: str) -> dict[str, object]:
         return self._request("POST", "/analyze", {"text": text})
 
+    def agent(self, text: str) -> dict[str, object]:
+        return self._request("POST", "/agent", {"text": text})
+
     def version(self) -> dict[str, object]:
         return self._request("GET", "/version")
 

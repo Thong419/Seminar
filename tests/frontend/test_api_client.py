@@ -35,6 +35,19 @@ def test_api_client_analyze_returns_json(monkeypatch) -> None:
     assert response["trust_score"] == 88
 
 
+def test_api_client_agent_returns_json(monkeypatch) -> None:
+    def fake_request(**kwargs):
+        return DummyResponse(200, {"prediction": "real", "confidence": 0.87, "trust_score": 0.91})
+
+    monkeypatch.setattr(requests, "request", fake_request)
+    client = APIClient(FrontendConfig(api_url="http://backend", timeout_seconds=3))
+
+    response = client.agent("article text")
+
+    assert response["prediction"] == "real"
+    assert response["trust_score"] == 0.91
+
+
 def test_api_client_raises_structured_error_on_backend_error(monkeypatch) -> None:
     def fake_request(**kwargs):
         return DummyResponse(503, {"error": {"code": "missing_model", "message": "No model."}})

@@ -1,0 +1,73 @@
+# Version control and local environments
+.git/
+.venv/
+venv/
+env/
+
+# Python cache and test artifacts
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Runtime and experiment outputs
+mlruns/
+mlartifacts/
+wandb/
+checkpoints/
+logs/
+*.log
+
+# Generated build artifacts
+build/
+dist/
+*.egg-info/
+
+# Data payloads that should be downloaded or mounted separately
+data/raw/
+data/processed/
+
+# Local/archive material not needed in the runtime image
+archive/
+artifacts/agent_traces/
+artifacts/tmp/
+artifacts/cache/
+artifacts/exports/
+
+# Model training checkpoints and optimizer state
+models/**/checkpoint-*/
+models/**/*.pt
+models/**/*.pth
+models/**/*.ckpt
+models/**/optimizer.pt
+models/**/scheduler.pt
+models/**/rng_state.pth
+models/**/trainer_state.json
+models/**/training_args.bin
+
+# LaTeX temporary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+texput.log
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo

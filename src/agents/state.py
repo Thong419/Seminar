@@ -16,12 +16,23 @@ class Verdict(str, Enum):
     confirmed_real = "confirmed_real"
 
 
+class ReviewState(str, Enum):
+    real = "REAL"
+    fake = "FAKE"
+    uncertain = "UNCERTAIN"
+
+
 class EvidenceItem(BaseModel):
     title: str
     source: str
     content: str
     relevance_score: float = Field(ge=0.0, le=1.0)
     url: str | None = None
+    query: str | None = None
+    provider: str | None = None
+    source_credibility: float = Field(default=0.5, ge=0.0, le=1.0)
+    stance: str = Field(default="neutral")
+    matched_terms: list[str] = Field(default_factory=list)
 
 
 class AgentState(TypedDict, total=False):
@@ -36,6 +47,8 @@ class AgentState(TypedDict, total=False):
     important_tokens: list[dict[str, float | str]]
     evidence_summary: str
     explanation_details: dict[str, object]
+    human_review_state: ReviewState
+    conflict_flag: bool
 
 
 class AgentConfig(BaseModel):

@@ -1,0 +1,34 @@
+[
+  {
+    "token": "Mars",
+    "importance": 1.0
+  },
+  {
+    "token": "on",
+    "importance": 0.95
+  },
+  {
+    "token": "ater",
+    "importance": 0.9
+  },
+  {
+    "token": "Cr",
+    "importance": 0.85
+  },
+  {
+    "token": "zero",
+    "importance": 0.8
+  },
+  {
+    "token": "Je",
+    "importance": 0.75
+  },
+  {
+    "token": "from",
+    "importance": 0.7
+  },
+  {
+    "token": "samples",
+    "importance": 0.65
+  }
+]

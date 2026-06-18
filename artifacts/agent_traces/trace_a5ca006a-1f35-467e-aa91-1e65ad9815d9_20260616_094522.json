@@ -1,0 +1,80 @@
+{
+  "request_id": "a5ca006a-1f35-467e-aa91-1e65ad9815d9",
+  "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars.",
+  "tool_traces": [
+    {
+      "tool_name": "classifier",
+      "input_data": {
+        "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars."
+      },
+      "output_data": {
+        "label": "fake",
+        "confidence": 0.9986516833305359
+      },
+      "execution_time_ms": 114.41159248352051,
+      "error": null,
+      "timestamp": "2026-06-16T09:45:06.979264"
+    },
+    {
+      "tool_name": "evidence",
+      "input_data": {
+        "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars."
+      },
+      "output_data": {
+        "evidence_found": true,
+        "num_sources": 5,
+        "conflict_flag": false,
+        "support_score": 0.5309213892988313
+      },
+      "execution_time_ms": 14275.269508361816,
+      "error": null,
+      "timestamp": "2026-06-16T09:45:21.254533"
+    },
+    {
+      "tool_name": "decision",
+      "input_data": {
+        "classification": {
+          "label": "fake",
+          "confidence": 0.9986516833305359
+        },
+        "evidence_found": true
+      },
+      "output_data": {
+        "trust_score": 0.496301118568858,
+        "decision_reason": "Evidence conflicts with classifier. confidence=1.00, support_score=0.53, contradiction_score=0.00, source_credibility=0.50. Human review state set to UNCERTAIN.",
+        "risk_level": "high",
+        "support_count": 1,
+        "contradict_count": 1,
+        "support_score": 0.5309213892988313,
+        "contradiction_score": 0.0,
+        "source_credibility_score": 0.5,
+        "evidence_quality_score": 0.7132520239852135,
+        "conflict_flag": true,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 0.0,
+      "error": null,
+      "timestamp": "2026-06-16T09:45:21.255534"
+    },
+    {
+      "tool_name": "explainability",
+      "input_data": {
+        "prediction": "fake",
+        "confidence": 0.9986516833305359
+      },
+      "output_data": {
+        "explanation_length": 454,
+        "num_tokens": 8,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 862.295389175415,
+      "error": null,
+      "timestamp": "2026-06-16T09:45:22.118333"
+    }
+  ],
+  "final_trust_score": 0.496301118568858,
+  "final_decision": "fake",
+  "total_execution_time_ms": 15253.480672836304,
+  "timestamp_start": "2026-06-16T09:45:06.864852",
+  "timestamp_end": "2026-06-16T09:45:22.118333"
+}

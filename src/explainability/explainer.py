@@ -34,6 +34,7 @@ class ExplainabilityService:
         confidence: float,
         evidence: list[EvidenceItem],
         evidence_score: float,
+        trust_score: float | None = None,
     ) -> UnifiedExplanation:
         shap_result = self.shap_explainer.explain(article_text, top_k_tokens=self.config.top_k_tokens)
         important_tokens = extract_token_importance(
@@ -49,6 +50,7 @@ class ExplainabilityService:
             source_trust=source_trust,
             important_tokens=important_tokens,
             evidence=evidence,
+            trust_score=trust_score,
             weights=self.config.weights,
         )
         save_shap_artifact(shap_result, self.config.artifact_dir / "shap_values.json")
@@ -64,6 +66,9 @@ class ExplainabilityService:
         weight_total = 0.0
         for item in evidence:
             relevance = max(item.relevance_score, 0.01)
-            weighted_sum += trust_scores.get(item.source, 0.5) * relevance
+            base_trust = getattr(item, "source_credibility", None)
+            if base_trust is None:
+                base_trust = trust_scores.get(item.source, 0.5)
+            weighted_sum += float(base_trust) * relevance
             weight_total += relevance
         return weighted_sum / max(weight_total, 1e-9)

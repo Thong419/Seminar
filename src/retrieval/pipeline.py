@@ -52,6 +52,11 @@ class EvidenceRetrievalPipeline:
                 content=item.content,
                 trust_score=self.trust_scores.get(item.source, 0.5),
                 relevance_score=item.relevance_score,
+                query=item.query,
+                provider=item.provider,
+                source_credibility=getattr(item, "source_credibility", self.trust_scores.get(item.source, 0.5)),
+                stance=item.stance,
+                matched_terms=item.matched_terms,
             )
             for item in evidence_documents
         ]

@@ -67,6 +67,7 @@ class ExplanationAgent:
             source_trust=source_trust,
             important_tokens=important_tokens,
             evidence=context.evidence,
+            trust_score=None,
             weights=self.explainability_config.weights,
         )
         shap_path = save_shap_artifact(

@@ -1,0 +1,22 @@
+[
+  {"id": 1, "category": "real_supported", "text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars.", "expected_state": "REAL"},
+  {"id": 2, "category": "real_supported", "text": "The CDC says vaccines help prevent severe illness from COVID-19.", "expected_state": "REAL"},
+  {"id": 3, "category": "real_supported", "text": "Reuters reported that inflation eased for the third straight month.", "expected_state": "REAL"},
+  {"id": 4, "category": "real_supported", "text": "The WHO recommended continued hand hygiene to reduce infection risk.", "expected_state": "REAL"},
+  {"id": 5, "category": "real_supported", "text": "JPL announced a new Mars mission technology demonstration.", "expected_state": "REAL"},
+  {"id": 6, "category": "fake_news", "text": "A miracle pill cures every disease overnight with no side effects.", "expected_state": "FAKE"},
+  {"id": 7, "category": "fake_news", "text": "Scientists secretly proved the Earth is flat, according to anonymous insiders.", "expected_state": "FAKE"},
+  {"id": 8, "category": "fake_news", "text": "A celebrity drink instantly reverses aging and restores youth in one week.", "expected_state": "FAKE"},
+  {"id": 9, "category": "fake_news", "text": "The government confirmed aliens are controlling weather satellites.", "expected_state": "FAKE"},
+  {"id": 10, "category": "fake_news", "text": "A secret recipe can make anyone invisible after one use.", "expected_state": "FAKE"},
+  {"id": 11, "category": "misleading_claim", "text": "The WHO said there is no evidence that 5G causes COVID-19.", "expected_state": "UNCERTAIN"},
+  {"id": 12, "category": "misleading_claim", "text": "A chart proves crime doubled after the city installed new street lights.", "expected_state": "UNCERTAIN"},
+  {"id": 13, "category": "misleading_claim", "text": "A report says the vaccine causes infertility, but the article only cites a small anecdote.", "expected_state": "UNCERTAIN"},
+  {"id": 14, "category": "misleading_claim", "text": "A viral post claims coffee is more dangerous than smoking, based on one misleading graph.", "expected_state": "UNCERTAIN"},
+  {"id": 15, "category": "misleading_claim", "text": "The video suggests the eclipse was faked with CGI, despite contrary astronomical evidence.", "expected_state": "UNCERTAIN"},
+  {"id": 16, "category": "contradictory_claim", "text": "A fake headline says NASA never landed on Mars, while official mission updates say the rover is active.", "expected_state": "UNCERTAIN"},
+  {"id": 17, "category": "contradictory_claim", "text": "The article claims the weather agency denied the storm, but the agency issued a public alert.", "expected_state": "UNCERTAIN"},
+  {"id": 18, "category": "contradictory_claim", "text": "A post claims vaccination was banned globally, but public health agencies list active vaccination programs.", "expected_state": "UNCERTAIN"},
+  {"id": 19, "category": "out_of_distribution", "text": "This sentence discusses a fictional dragon council debating moon taxation.", "expected_state": "UNCERTAIN"},
+  {"id": 20, "category": "out_of_distribution", "text": "Quantum sandcastles sing to the ocean in a future alphabet of colors.", "expected_state": "UNCERTAIN"}
+]

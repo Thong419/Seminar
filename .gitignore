@@ -1,1 +1,97 @@
-/.venv
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env
+.env.*
+!.env.example
+
+# Build and packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Test and lint artifacts
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Jupyter and notebooks
+.ipynb_checkpoints/
+
+# Runtime logs
+*.log
+logs/
+
+# Local artifacts and large generated outputs
+artifacts/tmp/
+artifacts/cache/
+artifacts/exports/
+
+# ML experiment and model temp outputs
+mlruns/
+mlartifacts/
+checkpoints/
+wandb/
+
+# Monitoring generated files (keep placeholder with .gitkeep if needed)
+artifacts/monitoring/*.csv
+artifacts/monitoring/*.json
+artifacts/monitoring/*.png
+!artifacts/monitoring/.gitkeep
+
+# Data files (raw/processed payloads should not be committed)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Model binaries and checkpoints
+models/**/*.bin
+models/**/*.pt
+models/**/*.pth
+models/**/*.safetensors
+models/**/*.ckpt
+
+# Streamlit local state
+.streamlit/secrets.toml
+
+# Docker and local override files
+docker-compose.override.yml
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# LaTeX temporary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+texput.log
+main.log
+main.aux
+main.out

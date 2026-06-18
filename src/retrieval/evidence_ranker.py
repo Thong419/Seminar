@@ -97,6 +97,11 @@ def rank_evidence(
                 content=item.content,
                 trust_score=trust_scores.get(item.source, 0.5),
                 relevance_score=max(0.0, min(1.0, score)),
+                query=item.query,
+                provider=item.provider,
+                source_credibility=trust_scores.get(item.source, item.source_credibility),
+                stance=item.stance,
+                matched_terms=item.matched_terms,
             )
         )
     return ranked

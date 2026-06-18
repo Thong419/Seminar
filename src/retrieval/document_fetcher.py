@@ -15,6 +15,7 @@ except Exception:  # pragma: no cover - optional dependency fallback
     Article = None  # type: ignore[assignment]
 
 from src.retrieval.search_client import SearchResult
+from src.retrieval.source_credibility import score_source_credibility
 
 
 @dataclass(frozen=True, slots=True)
@@ -25,6 +26,11 @@ class EvidenceDocument:
     content: str
     trust_score: float
     relevance_score: float
+    query: str | None = None
+    provider: str | None = None
+    source_credibility: float = 0.5
+    stance: str = "neutral"
+    matched_terms: list[str] | None = None
 
 
 class DocumentFetcher:
@@ -34,6 +40,7 @@ class DocumentFetcher:
 
     def fetch(self, result: SearchResult) -> EvidenceDocument:
         content = self._extract_content(result.url, result.snippet)
+        source_credibility = score_source_credibility(result.source, result.url)
         return EvidenceDocument(
             title=result.title,
             url=result.url,
@@ -41,6 +48,9 @@ class DocumentFetcher:
             content=content,
             trust_score=0.0,
             relevance_score=result.provider_relevance,
+            query=result.query,
+            provider=result.provider,
+            source_credibility=source_credibility,
         )
 
     def _extract_content(self, url: str, fallback_snippet: str) -> str:
@@ -48,8 +58,11 @@ class DocumentFetcher:
             return fallback_snippet.strip()
 
         headers = {"User-Agent": self.user_agent}
-        response = requests.get(url, headers=headers, timeout=self.timeout_seconds)
-        response.raise_for_status()
+        try:
+            response = requests.get(url, headers=headers, timeout=self.timeout_seconds)
+            response.raise_for_status()
+        except Exception:
+            return fallback_snippet.strip()
 
         if Article is not None:
             try:

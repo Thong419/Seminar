@@ -12,6 +12,7 @@ from src.config.pipeline import ModelConfig
 from src.config.settings import AppSettings, get_settings
 
 if TYPE_CHECKING:
+    from src.agent.controller import AgentController
     from src.agents.workflow import AgenticWorkflow
     from src.inference.predictor import Predictor
     from src.monitoring.monitor import MonitoringService
@@ -100,6 +101,37 @@ def get_monitoring_service() -> MonitoringService:
             detail={
                 "code": "monitoring_unavailable",
                 "message": "The monitoring service could not be initialized.",
+                "details": {"error": str(exc)},
+            },
+        ) from exc
+
+
+@lru_cache(maxsize=1)
+def get_agent_controller() -> AgentController:
+    """Inject the Agent Controller with all dependencies."""
+    settings = get_settings()
+    model_config = get_model_config()
+    try:
+        from src.agent.controller import AgentController, AgentControllerConfig
+
+        predictor = get_predictor()
+        agent_config = AgentControllerConfig(
+            confidence_threshold=0.85,
+            enable_evidence_retrieval=True,
+            enable_tracing=True,
+        )
+        return AgentController(
+            predictor=predictor,
+            model_config=model_config,
+            explainability_config_path=Path("configs/explainability.yaml"),
+            agent_config=agent_config,
+        )
+    except (FileNotFoundError, OSError, ValueError) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail={
+                "code": "agent_controller_unavailable",
+                "message": "The agent controller could not be initialized.",
                 "details": {"error": str(exc)},
             },
         ) from exc

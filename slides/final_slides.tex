@@ -1,0 +1,253 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeameroption{hide notes}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
+\usepackage{tabularx}
+\usepackage{ragged2e}
+
+\graphicspath{{../docs/slides/images/}{../artifacts/monitoring/}}
+
+\definecolor{accent}{RGB}{11,79,108}
+\setbeamercolor{structure}{fg=accent}
+\setbeamercolor{frametitle}{fg=white,bg=accent}
+\setbeamercolor{block title}{fg=white,bg=accent}
+\setbeamercolor{block body}{bg=black!3}
+
+\newcommand{\smartimage}[2]{%
+  \IfFileExists{#1}{\includegraphics[width=0.9\textwidth,height=0.56\textheight,keepaspectratio]{#1}}{\fbox{\parbox[c][0.28\textheight][c]{0.8\textwidth}{\centering Missing image: #2}}}%
+}
+
+\title[Fake News Detection]{Fake News \& Misinformation Detection System}
+\author{Seminar Project Team}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+  \note{Speaker notes: Open by positioning the project as a production-minded NLP system, not only a classification experiment. Defense talking points: end-to-end scope, deployment, agentic behavior, monitoring. Expected questions: What makes this different from a notebook demo?}
+\end{frame}
+
+\begin{frame}{Problem Statement}
+  \begin{itemize}
+    \item Fake news spreads quickly and overwhelms manual verification workflows.
+    \item Binary classification alone is not enough for reviewer trust.
+    \item A practical system must combine accuracy, explanation, evidence, and deployability.
+  \end{itemize}
+  \note{Speaker notes: Emphasize operational pain: speed, scale, and reviewer burden. Defense talking points: realistic business framing, moderation support. Expected questions: Why is this a meaningful NLP problem?}
+\end{frame}
+
+\begin{frame}{Objectives}
+  \begin{itemize}
+    \item Build a reproducible baseline and a stronger transformer model.
+    \item Deploy the model through FastAPI and Streamlit.
+    \item Add an agentic layer for evidence retrieval, decision synthesis, and uncertainty handling.
+    \item Address monitoring, privacy, robustness, and ethics.
+  \end{itemize}
+  \note{Speaker notes: This slide maps directly to rubric requirements. Defense talking points: end-to-end design, not just modeling. Expected questions: Which objectives were most important for grading?}
+\end{frame}
+
+\begin{frame}{Dataset}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.52\textwidth}
+    \begin{itemize}
+      \item Local FakeNewsNet-style CSV configured in \texttt{configs/dataset.yaml}.
+      \item Fields: \texttt{text}, \texttt{label}; labels: fake and real.
+      \item Stratified split: 70\% train, 15\% validation, 15\% test.
+    \end{itemize}
+    \column{0.44\textwidth}
+    \begin{block}{Preprocessing}
+      \begin{itemize}
+        \item Remove HTML and URLs
+        \item Lowercase text
+        \item Normalize whitespace
+        \item Remove special characters
+      \end{itemize}
+    \end{block}
+  \end{columns}
+  \note{Speaker notes: Mention that preprocessing and splitting live in code, not only in notebooks. Defense talking points: reproducibility, stratification, data handling. Expected questions: How do you prevent leakage or class imbalance issues?}
+\end{frame}
+
+\begin{frame}{Baseline Model}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.46\textwidth}
+    \begin{itemize}
+      \item TF-IDF with unigram and bigram features.
+      \item Logistic Regression with balanced class weights.
+      \item Strong benchmark and sanity check for the pipeline.
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{table}
+      \centering
+      \small
+      \begin{tabular}{l r}
+        \toprule
+        Metric & Value \\
+        \midrule
+        Accuracy & 0.9913 \\
+        Precision & 0.9938 \\
+        Recall & 0.9870 \\
+        F1 & 0.9904 \\
+        \bottomrule
+      \end{tabular}
+    \end{table}
+  \end{columns}
+  \note{Speaker notes: Explain why a strong baseline matters scientifically and architecturally. Defense talking points: comparison fairness, interpretability, sparse model efficiency. Expected questions: Why choose Logistic Regression as the baseline?}
+\end{frame}
+
+\begin{frame}{RoBERTa Model}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.46\textwidth}
+    \begin{itemize}
+      \item \texttt{roberta-base} fine-tuned for binary classification.
+      \item Max length 512, batch size 16, learning rate $2\times10^{-5}$, 3 epochs.
+      \item Best checkpoint selected by validation F1.
+    \end{itemize}
+    \column{0.5\textwidth}
+    \begin{table}
+      \centering
+      \small
+      \begin{tabular}{l r}
+        \toprule
+        Metric & Value \\
+        \midrule
+        Accuracy & 0.9991 \\
+        Precision & 0.9987 \\
+        Recall & 0.9997 \\
+        F1 & 0.9992 \\
+        \bottomrule
+      \end{tabular}
+    \end{table}
+  \end{columns}
+  \note{Speaker notes: Stress contextual representation and checkpoint-based deployment separation. Defense talking points: why RoBERTa over sparse features; checkpoint stability. Expected questions: Why not DistilBERT or a larger model?}
+\end{frame}
+
+\begin{frame}{Agentic AI Architecture}
+  \begin{center}
+  \begin{tikzpicture}[node distance=0.7cm, every node/.style={font=\small}, block/.style={draw, rounded corners, fill=blue!8, minimum width=2.5cm, minimum height=0.85cm, align=center}]
+    \node[block] (a) {Article};
+    \node[block, below=of a] (b) {Classifier Tool};
+    \node[block, below=of b] (c) {Evidence Tool};
+    \node[block, below=of c] (d) {Decision Tool};
+    \node[block, below=of d] (e) {Explainability};
+    \draw[-{Latex[length=2mm]}, thick] (a) -- (b);
+    \draw[-{Latex[length=2mm]}, thick] (b) -- (c);
+    \draw[-{Latex[length=2mm]}, thick] (c) -- (d);
+    \draw[-{Latex[length=2mm]}, thick] (d) -- (e);
+  \end{tikzpicture}
+  \end{center}
+  \note{Speaker notes: Define agentic behavior as multi-step orchestration with intermediate decisions. Defense talking points: tool boundaries, trust score, human review state. Expected questions: What makes this truly agentic instead of just a pipeline?}
+\end{frame}
+
+\begin{frame}{Evidence Retrieval}
+  \begin{itemize}
+    \item Hybrid HTML-based retrieval improves demo robustness without requiring a single paid API.
+    \item Sources are scored by relevance, credibility, stance, and matched terms.
+    \item Aggregated outputs: support score, contradiction score, quality score, conflict flag.
+  \end{itemize}
+  \note{Speaker notes: Explain the practical fallback strategy and structured evidence bundle. Defense talking points: source credibility, public web dependency, heuristic stance detection. Expected questions: Why evidence retrieval? Why not rely only on confidence?}
+\end{frame}
+
+\begin{frame}{Explainability}
+  \begin{itemize}
+    \item Final explanation includes prediction, token importance, evidence summary, and review state.
+    \item Trust score comes from the decision layer and stays consistent in the UI.
+    \item UNCERTAIN is surfaced when confidence or evidence is insufficient.
+  \end{itemize}
+  \note{Speaker notes: Clarify difference between confidence and trust score. Defense talking points: consistent trust value, user-facing reasoning, uncertainty handling. Expected questions: Why do you need both confidence and trust?}
+\end{frame}
+
+\begin{frame}{System Architecture}
+  \smartimage{system_architecture.png}{System architecture}
+  \note{Speaker notes: Walk through frontend, backend, model, retrieval, and monitoring. Defense talking points: clean separation of concerns, deployability. Expected questions: Why keep both \texttt{/analyze} and \texttt{/agent}?}
+\end{frame}
+
+\begin{frame}{Evaluation}
+  \begin{itemize}
+    \item Offline metrics: accuracy, precision, recall, F1, confusion matrix.
+    \item Online-style checks: API tests, agent endpoint tests, trace serialization, monitoring writes.
+    \item Comparison is always against the TF-IDF baseline.
+  \end{itemize}
+  \note{Speaker notes: Separate model evaluation from system evaluation. Defense talking points: held-out testing, endpoint validation, orchestration behavior. Expected questions: How did you validate the agent workflow itself?}
+\end{frame}
+
+\begin{frame}{Demo Flow}
+  \begin{enumerate}
+    \item User submits article text in Streamlit.
+    \item FastAPI masks PII and routes the request.
+    \item Agent classifies, retrieves evidence, makes a decision, and generates explanation.
+    \item UI shows prediction, trust, evidence cards, and trace timeline.
+  \end{enumerate}
+  \note{Speaker notes: This is the live demo script condensed into one slide. Defense talking points: explain what the examiner will see step by step. Expected questions: Which endpoint powers the final frontend?}
+\end{frame}
+
+\begin{frame}{Results}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.56\textwidth}
+    \begin{itemize}
+      \item RoBERTa outperforms the baseline on all core metrics.
+      \item Agent layer adds evidence, conflict detection, and explainability without retraining the checkpoint.
+      \item Monitoring and traces improve defense readiness and operational visibility.
+    \end{itemize}
+    \column{0.4\textwidth}
+    \smartimage{confusion_matrix.png}{Confusion matrix}
+  \end{columns}
+  \note{Speaker notes: Report model improvement and system-level improvement separately. Defense talking points: performance is already high, so added value comes from trust and deployability. Expected questions: If baseline is already strong, why keep RoBERTa?}
+\end{frame}
+
+\begin{frame}{Monitoring and Lifecycle}
+  \begin{itemize}
+    \item Monitoring modules track confidence drift, prediction drift, and model health.
+    \item Agent metrics capture evidence success rate, conflict rate, uncertain rate, and response time.
+    \item Retraining strategy is designed conceptually and partially implemented through monitoring outputs.
+  \end{itemize}
+  \note{Speaker notes: Link this directly to the continual learning requirement. Defense talking points: concept vs full automation, alert-driven retraining, file-based artifacts. Expected questions: Why is retraining not fully automated?}
+\end{frame}
+
+\begin{frame}{Limitations}
+  \begin{itemize}
+    \item Evidence retrieval depends on public web availability.
+    \item Evidence stance analysis is heuristic, not learned.
+    \item Public production deployment still needs stronger observability and rate limiting.
+  \end{itemize}
+  \note{Speaker notes: Be explicit and non-defensive. Defense talking points: realistic scope control, no hidden weaknesses. Expected questions: What would fail first in a public deployment?}
+\end{frame}
+
+\begin{frame}{Future Work}
+  \begin{itemize}
+    \item Replace heuristic evidence alignment with stance classification.
+    \item Expand robustness and fairness evaluation across broader domains.
+    \item Add managed observability, CI-based release flow, and reviewer feedback loop.
+  \end{itemize}
+  \note{Speaker notes: Present future work as natural next steps, not admissions of failure. Defense talking points: retrieval quality, cloud hardening, human-in-the-loop learning. Expected questions: What is the highest-ROI next improvement?}
+\end{frame}
+
+\begin{frame}{Conclusion}
+  \begin{itemize}
+    \item The project meets the end-to-end NLP, deployment, and agentic AI requirements.
+    \item RoBERTa provides strong performance; the agent layer provides trust and reviewability.
+    \item The final repository is ready for submission and defense with documented risks.
+  \end{itemize}
+  \note{Speaker notes: Close on completeness and coherence. Defense talking points: end-to-end, explainable, deployable, monitored. Expected questions: What single claim best summarizes the project?}
+\end{frame}
+
+\begin{frame}{Q\&A}
+  \centering
+  \Large Questions?
+  \vspace{1em}
+
+  \normalsize Prepared topics: model choice, trust score, UNCERTAIN state, deployment, ethics, monitoring.
+  \note{Speaker notes: Transition into defense posture. Defense talking points: invite deeper questions on architecture and trade-offs. Expected questions: Why not retrain the model? Why trust the evidence layer?}
+\end{frame}
+
+\end{document}
