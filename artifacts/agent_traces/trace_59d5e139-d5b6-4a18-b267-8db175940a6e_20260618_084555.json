@@ -1,0 +1,81 @@
+{
+  "request_id": "59d5e139-d5b6-4a18-b267-8db175940a6e",
+  "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars.",
+  "tool_traces": [
+    {
+      "tool_name": "classifier",
+      "input_data": {
+        "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars."
+      },
+      "output_data": {
+        "label": "fake",
+        "confidence": 0.9986516833305359
+      },
+      "execution_time_ms": 17.0135498046875,
+      "error": null,
+      "timestamp": "2026-06-18T08:45:43.626036"
+    },
+    {
+      "tool_name": "evidence",
+      "input_data": {
+        "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars."
+      },
+      "output_data": {
+        "evidence_found": false,
+        "num_sources": 0,
+        "conflict_flag": false,
+        "support_score": 0.0
+      },
+      "execution_time_ms": 11792.150497436523,
+      "error": null,
+      "timestamp": "2026-06-18T08:45:55.418186"
+    },
+    {
+      "tool_name": "decision",
+      "input_data": {
+        "classification": {
+          "label": "fake",
+          "confidence": 0.9986516833305359
+        },
+        "evidence_found": false
+      },
+      "output_data": {
+        "trust_score": 0.8488539308309555,
+        "decision_reason": "No external evidence found. Relying solely on classifier (confidence=1.00). Review state forced to UNCERTAIN.",
+        "risk_level": "medium",
+        "support_count": 0,
+        "refute_count": 0,
+        "neutral_count": 0,
+        "support_score": 0.0,
+        "contradiction_score": 0.0,
+        "source_credibility_score": 0.0,
+        "evidence_quality_score": 0.0,
+        "conflict_flag": false,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 0.0,
+      "error": null,
+      "timestamp": "2026-06-18T08:45:55.418186"
+    },
+    {
+      "tool_name": "explainability",
+      "input_data": {
+        "prediction": "fake",
+        "confidence": 0.9986516833305359
+      },
+      "output_data": {
+        "explanation_length": 365,
+        "num_tokens": 8,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 106.4596176147461,
+      "error": null,
+      "timestamp": "2026-06-18T08:45:55.524646"
+    }
+  ],
+  "final_trust_score": 0.8488539308309555,
+  "final_decision": "fake",
+  "total_execution_time_ms": 11915.623664855957,
+  "timestamp_start": "2026-06-18T08:45:43.609022",
+  "timestamp_end": "2026-06-18T08:45:55.524646"
+}

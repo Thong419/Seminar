@@ -1,0 +1,81 @@
+{
+  "request_id": "demo-trump_bannon",
+  "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from the National Security Council on Wednesday. The White House said the change was part of a routine restructuring to improve coordination of foreign policy and national security decisions.",
+  "tool_traces": [
+    {
+      "tool_name": "classifier",
+      "input_data": {
+        "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from th"
+      },
+      "output_data": {
+        "label": "real",
+        "confidence": 0.9994603991508484
+      },
+      "execution_time_ms": 99.29275512695312,
+      "error": null,
+      "timestamp": "2026-06-18T08:58:02.651363"
+    },
+    {
+      "tool_name": "evidence",
+      "input_data": {
+        "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from th"
+      },
+      "output_data": {
+        "evidence_found": true,
+        "num_sources": 3,
+        "conflict_flag": false,
+        "support_score": 0.49224318617857943
+      },
+      "execution_time_ms": 9.014129638671875,
+      "error": null,
+      "timestamp": "2026-06-18T08:58:02.660377"
+    },
+    {
+      "tool_name": "decision",
+      "input_data": {
+        "classification": {
+          "label": "real",
+          "confidence": 0.9994603991508484
+        },
+        "evidence_found": true
+      },
+      "output_data": {
+        "trust_score": 0.7054322447580127,
+        "decision_reason": "Classifier: REAL (confidence=1.00). Evidence: 3 sources retrieved (support=2, refute=0, neutral=1). Source credibility=0.80. Sources supporting the claim: Trump removes Bannon from NSC role in shake-up, White House restructuring statement on National Security Council. Evidence aligns with REAL classification: supporting sources corroborate the classifier output.",
+        "risk_level": "medium",
+        "support_count": 2,
+        "refute_count": 0,
+        "neutral_count": 1,
+        "support_score": 0.49224318617857943,
+        "contradiction_score": 0.013582040892338346,
+        "source_credibility_score": 0.7966666666666667,
+        "evidence_quality_score": 0.6246643906185714,
+        "conflict_flag": false,
+        "human_review_state": "REAL"
+      },
+      "execution_time_ms": 0.0,
+      "error": null,
+      "timestamp": "2026-06-18T08:58:02.660377"
+    },
+    {
+      "tool_name": "explainability",
+      "input_data": {
+        "prediction": "real",
+        "confidence": 0.9994603991508484
+      },
+      "output_data": {
+        "explanation_length": 594,
+        "num_tokens": 8,
+        "human_review_state": "REAL"
+      },
+      "execution_time_ms": 830.5213451385498,
+      "error": null,
+      "timestamp": "2026-06-18T08:58:03.490898"
+    }
+  ],
+  "final_trust_score": 0.7054322447580127,
+  "final_decision": "real",
+  "total_execution_time_ms": 938.8282299041748,
+  "timestamp_start": "2026-06-18T08:58:02.552070",
+  "timestamp_end": "2026-06-18T08:58:03.490898"
+}

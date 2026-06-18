@@ -31,7 +31,6 @@ class Predictor:
             model=model,
             tokenizer=tokenizer,
             truncation=True,
-            return_all_scores=False,
         )
 
     def predict(self, text: str) -> Prediction:

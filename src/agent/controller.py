@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -51,6 +52,8 @@ class AgentResult:
     contradiction_score: float
     source_credibility_score: float
     evidence_quality_score: float
+    accepted_evidence: list[dict[str, Any]]
+    rejected_evidence: list[dict[str, Any]]
     trace: AgentTrace | None = None
 
 
@@ -140,6 +143,10 @@ class AgentController:
         else:
             logger.info("Step 2: Evidence retrieval disabled by configuration")
 
+        classification = self._apply_demo_evidence_override(classification, evidence)
+        label = classification.get("label", label)
+        confidence = float(classification.get("confidence", confidence))
+
         # Step 3: Decision
         logger.info("Step 3: Make decision")
         dec_start = time.time()
@@ -162,6 +169,8 @@ class AgentController:
         contradiction_score = float(decision.get("contradiction_score", 0.0))
         source_credibility_score = float(decision.get("source_credibility_score", 0.0))
         evidence_quality_score = float(decision.get("evidence_quality_score", 0.0))
+        accepted_evidence = list(evidence.get("accepted_evidence", []))
+        rejected_evidence = list(evidence.get("rejected_evidence", []))
 
         # Step 4: Generate explanation
         logger.info("Step 4: Generate explanation")
@@ -187,6 +196,10 @@ class AgentController:
                 evidence_sentence += " Human review state is REAL because evidence and classifier align."
             elif human_review_state == ReviewState.fake.value:
                 evidence_sentence += " Human review state is FAKE because evidence and classifier align."
+            evidence_sentence += (
+                f" Accepted evidence items: {len(accepted_evidence)}."
+                f" Rejected evidence items: {len(rejected_evidence)}."
+            )
             explanation_text = f"{explanation_report.final_explanation}{evidence_sentence}"
             important_tokens = [{"token": t.get("token"), "importance": t.get("importance")} for t in explanation_report.important_tokens]
         except Exception as e:
@@ -238,6 +251,8 @@ class AgentController:
             contradiction_score=contradiction_score,
             source_credibility_score=source_credibility_score,
             evidence_quality_score=evidence_quality_score,
+            accepted_evidence=accepted_evidence,
+            rejected_evidence=rejected_evidence,
             trace=trace,
         )
         logger.info(f"Agent completed in {total_time_ms:.2f}ms: {label} (confidence={confidence:.2f}, trust={trust_score:.2f})")
@@ -251,3 +266,43 @@ class AgentController:
             evidence_source_count=len(result.sources),
         )
         return result
+
+    def _apply_demo_evidence_override(
+        self,
+        classification: dict[str, Any],
+        evidence: dict[str, Any],
+    ) -> dict[str, Any]:
+        """In demo mode, allow strong curated evidence to correct the classifier.
+
+        This keeps normal runtime unchanged while making seminar demos stable and
+        aligned with the curated retrieval provider.
+        """
+        if os.getenv("RETRIEVAL_MODE", "live").strip().lower() != "demo":
+            return classification
+
+        support_score = float(evidence.get("support_score", 0.0))
+        contradiction_score = float(evidence.get("contradiction_score", 0.0))
+        source_credibility_score = float(evidence.get("source_credibility_score", 0.0))
+        evidence_quality_score = float(evidence.get("evidence_quality_score", 0.0))
+        if not evidence.get("evidence_found"):
+            return classification
+
+        label = str(classification.get("label", "uncertain")).lower()
+        confidence = float(classification.get("confidence", 0.0))
+        if (
+            label != "real"
+            and support_score >= 0.65
+            and contradiction_score <= 0.10
+            and source_credibility_score >= 0.85
+            and evidence_quality_score >= 0.45
+        ):
+            return {"label": "real", "confidence": max(confidence, 0.90)}
+        if (
+            label != "fake"
+            and contradiction_score >= 0.65
+            and support_score <= 0.10
+            and source_credibility_score >= 0.85
+            and evidence_quality_score >= 0.45
+        ):
+            return {"label": "fake", "confidence": max(confidence, 0.90)}
+        return classification

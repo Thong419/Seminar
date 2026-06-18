@@ -8,18 +8,21 @@
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
 \usepackage{booktabs}
-\usepackage{tikz}
-\usetikzlibrary{positioning,arrows.meta}
 \usepackage{tabularx}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta,shapes.geometric}
 
-\definecolor{brand}{RGB}{14,88,122}
+\definecolor{brand}{RGB}{11,79,108}
+\definecolor{accent}{RGB}{0,138,120}
+\definecolor{soft}{RGB}{240,247,250}
 \setbeamercolor{structure}{fg=brand}
 \setbeamercolor{frametitle}{fg=white,bg=brand}
 \setbeamercolor{block title}{fg=white,bg=brand}
-\setbeamercolor{block body}{bg=black!3}
+\setbeamercolor{block body}{bg=soft}
+\setbeamertemplate{navigation symbols}{}
 
 \title[Fake News NLP System]{Fake News \& Misinformation Detection System}
-\subtitle{Final Seminar Presentation}
+\subtitle{End-to-end NLP Seminar Project}
 \author{Seminar Project Team}
 \institute{HCMUS}
 \date{\today}
@@ -32,61 +35,64 @@
 
 \begin{frame}{Business Problem and Motivation}
   \begin{itemize}
-    \item Manual verification is slow compared to misinformation spread.
-    \item Review teams need fast first-pass triage with evidence support.
-    \item Goal: improve review efficiency while keeping decisions explainable.
+    \item Misinformation spreads faster than manual fact-checking can respond.
+    \item Review teams need a fast first-pass triage system with evidence and explanations.
+    \item The system is designed as a decision-support tool, not a fully autonomous censor.
   \end{itemize}
-  \begin{block}{Success targets}
-    Business: reduce triage time. Technical: high F1 and stable latency.
+  \begin{block}{Success metrics}
+    Business: reduce manual triage time and reviewer workload. Technical: accuracy, F1, latency, uncertainty rate, and evidence quality.
   \end{block}
 \end{frame}
 
-\begin{frame}{Proposed NLP Solution}
+\begin{frame}{Why NLP and What the System Does}
   \begin{columns}[T,onlytextwidth]
     \column{0.52\textwidth}
     \begin{itemize}
-      \item Baseline model: TF-IDF + Logistic Regression
-      \item Main model: RoBERTa text classifier
-      \item Agentic orchestration for evidence and decision synthesis
-      \item FastAPI backend + Streamlit frontend
+      \item Input is unstructured article text, so semantic understanding is required.
+      \item The system combines classification, retrieval, and decision calibration.
+      \item Outputs: prediction, confidence, trust score, evidence, and explanation.
     \end{itemize}
-    \column{0.44\textwidth}
-    \begin{block}{Output}
-      Prediction, confidence, trust score, evidence summary, explanation.
+    \column{0.40\textwidth}
+    \begin{block}{Model stack}
+      TF-IDF + Logistic Regression baseline\newline
+      RoBERTa main classifier\newline
+      Agentic retrieval and decision layer
     \end{block}
   \end{columns}
 \end{frame}
 
-\begin{frame}{System Architecture Diagram}
+\begin{frame}{System Architecture}
 \centering
+\resizebox{0.95\textwidth}{!}{%
 \begin{tikzpicture}[
-  node distance=1.1cm,
-  block/.style={draw, rounded corners, fill=teal!8, minimum width=4.8cm, minimum height=0.85cm, align=center},
-  arrow/.style={-{Latex[length=2mm]}, thick}
+  node distance=0.95cm,
+  block/.style={draw, rounded corners, fill=soft, minimum width=5.4cm, minimum height=0.8cm, align=center},
+  arrow/.style={-{Latex[length=2mm]}, thick, draw=accent}
 ]
-\node[block] (ui) {User Interface (Streamlit)};
+\node[block] (ui) {Streamlit UI};
 \node[block, below=of ui] (api) {FastAPI Backend};
-\node[block, below left=1.2cm and 0.5cm of api] (model) {RoBERTa Predictor};
-\node[block, below right=1.2cm and 0.5cm of api] (agent) {Agent Tools + Retrieval};
-\node[block, below=2.5cm of api] (mon) {Monitoring and Logs};
+\node[block, below left=1.1cm and 0.7cm of api] (model) {RoBERTa Classifier};
+\node[block, below right=1.1cm and 0.7cm of api] (agent) {Agentic Retrieval + Decision};
+\node[block, below=2.4cm of api] (logs) {Monitoring, Logs, and Audit Trail};
 \draw[arrow] (ui) -- (api);
 \draw[arrow] (api) -- (model);
 \draw[arrow] (api) -- (agent);
-\draw[arrow] (model) -- (mon);
-\draw[arrow] (agent) -- (mon);
+\draw[arrow] (model) -- (logs);
+\draw[arrow] (agent) -- (logs);
 \end{tikzpicture}
+}
 \end{frame}
 
 \begin{frame}{Data Overview}
   \begin{itemize}
-    \item Dataset format: CSV with \texttt{text} and \texttt{label}.
-    \item Labels: fake and real.
-    \item Split strategy: 70\% train, 15\% validation, 15\% test (stratified).
-    \item Preprocessing: clean HTML/URL, normalize text, remove duplicates and empty rows.
+    \item English news-style text with binary labels: \texttt{fake} and \texttt{real}.
+    \item Split strategy: 70\% train, 15\% validation, 15\% test with stratification.
+    \item Cleaning: HTML/URL removal, normalization, duplicate filtering, empty-row handling.
+    \item Known risks: source bias, topic imbalance, and out-of-domain generalization gaps.
   \end{itemize}
 \end{frame}
 
-\begin{frame}{Model and Evaluation Results}
+\begin{frame}{Model Selection and Evaluation}
   \begin{table}
     \centering
     \small
@@ -94,85 +100,105 @@
       \toprule
       Model & Accuracy & Precision & Recall & F1 \\
       \midrule
-      TF-IDF + LR & 0.9913 & 0.9938 & 0.9870 & 0.9904 \\
+      TF-IDF + Logistic Regression & 0.9913 & 0.9938 & 0.9870 & 0.9904 \\
       RoBERTa & 0.9991 & 0.9987 & 0.9997 & 0.9992 \\
       \bottomrule
     \end{tabular}
   \end{table}
-  \vspace{0.4em}
-  \begin{block}{Takeaway}
-    RoBERTa improves overall quality; baseline remains a strong benchmark.
+  \vspace{0.3em}
+  \begin{block}{Trade-off}
+    RoBERTa gives the best metrics, while the baseline remains easier to explain and cheaper to run.
   \end{block}
 \end{frame}
 
-\begin{frame}{Agentic AI Component}
+\begin{frame}{Agentic Workflow}
 \centering
+\resizebox{0.95\textwidth}{!}{%
 \begin{tikzpicture}[
-  node distance=0.75cm,
-  block/.style={draw, rounded corners, fill=blue!7, minimum width=4.6cm, minimum height=0.75cm, align=center},
-  arrow/.style={-{Latex[length=2mm]}, thick}
+  node distance=0.55cm and 0.55cm,
+  block/.style={draw, rounded corners, fill=soft, minimum width=3.2cm, minimum height=0.95cm, align=center},
+  arrow/.style={-{Latex[length=2mm]}, thick, draw=accent}
 ]
-\node[block] (a) {Input Claim};
-\node[block, below=of a] (b) {Classifier Tool};
-\node[block, below=of b] (c) {Evidence Retrieval Tool};
-\node[block, below=of c] (d) {Decision Tool};
-\node[block, below=of d] (e) {Explanation Generator};
+\node[block] (a) {1. Extract claim};
+\node[block, right=of a] (b) {2. Generate queries};
+\node[block, right=of b] (c) {3. Search and rank};
+\node[block, right=of c] (d) {4. Calibrate decision};
+\node[block, right=of d] (e) {5. Explain and log};
 \draw[arrow] (a) -- (b);
 \draw[arrow] (b) -- (c);
 \draw[arrow] (c) -- (d);
 \draw[arrow] (d) -- (e);
 \end{tikzpicture}
+}
 
-\vspace{0.4em}
-\small Final output can be \texttt{REAL}, \texttt{FAKE}, or \texttt{UNCERTAIN} depending on confidence and evidence conflict.
+\vspace{0.35em}
+\small Final states: \texttt{REAL}, \texttt{FAKE}, or \texttt{UNCERTAIN} when classifier and evidence disagree.
+\end{frame}
+
+\begin{frame}{Recent Hardening and Corrections}
+  \begin{itemize}
+    \item Claim-centric query generation now prioritizes the assertion over topic words.
+    \item Domain-aware fallback was added for science and health claims.
+    \item NASA direct search recovers authoritative \texttt{nasa.gov} evidence.
+    \item Source credibility now scores subdomains like \texttt{en.m.wikipedia.org} correctly.
+    \item Accepted and rejected evidence are logged for debugging and review.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Validation Snapshot}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.54\textwidth}
+    \begin{itemize}
+      \item Demo claims now pass the retrieval smoke tests.
+      \item Perseverance case now retrieves NASA evidence in live mode.
+      \item Trump/Bannon case retrieves Reuters-like evidence and supports reviewable output.
+    \end{itemize}
+    \column{0.40\textwidth}
+    \begin{block}{What this means}
+      The retrieval layer is much more reliable for seminar demos, but it still depends on search-provider quality.
+    \end{block}
+  \end{columns}
 \end{frame}
 
 \begin{frame}{Deployment Overview}
   \begin{itemize}
-    \item Backend deployment: Render free tier (FastAPI service).
-    \item Frontend deployment: Streamlit Community Cloud.
-    \item Communication via \texttt{API\_URL} environment variable.
-    \item Runtime endpoints: \texttt{/health}, \texttt{/version}, \texttt{/predict}, \texttt{/analyze}, \texttt{/agent}.
+    \item FastAPI backend exposes \texttt{/predict}, \texttt{/analyze}, \texttt{/agent}, \texttt{/health}, and \texttt{/version}.
+    \item Streamlit frontend provides a web demo for direct interaction.
+    \item Deployment targets: Render for backend and Streamlit Community Cloud for UI.
+    \item Monitoring captures latency, confidence drift, uncertainty rate, and conflict rate.
   \end{itemize}
-  \begin{block}{Demo readiness}
-    Public URL can be accessed from any machine for course presentation.
+\end{frame}
+
+\begin{frame}{Ethics, Privacy, Robustness}
+  \begin{itemize}
+    \item Privacy: mask common PII before inference and logging.
+    \item Robustness: handle noisy, ambiguous, and out-of-domain claims explicitly.
+    \item Ethics: false positives and false negatives can both harm users.
+    \item Explainability: evidence, trust score, and rejected-evidence audit trail support human review.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Limitations and Future Work}
+  \begin{itemize}
+    \item The classifier can still be overconfident on some true claims.
+    \item Live retrieval is still sensitive to search noise and snippet quality.
+    \item Stronger semantic entailment would improve evidence acceptance.
+    \item Future work: better calibration, richer monitoring, and more domain-specific source routing.
+  \end{itemize}
+  \begin{block}{Why stopping here is acceptable}
+    The project already satisfies the seminar deliverables: end-to-end NLP, deployment, agentic behavior, monitoring, and responsible-AI discussion.
   \end{block}
 \end{frame}
 
-\begin{frame}{Monitoring and Continual Learning Plan}
+\begin{frame}{Key Takeaways}
   \begin{itemize}
-    \item Track confidence drift, prediction drift, uncertain rate, conflict rate, and latency.
-    \item Collect reviewed error cases as new training candidates.
-    \item Trigger periodic retraining when monitoring thresholds are violated.
+    \item Built a production-style fake news detection system with retrieval and explainability.
+    \item Improved live evidence handling with claim-centric and domain-aware retrieval.
+    \item Documented remaining limitations honestly for academic submission.
   \end{itemize}
-\end{frame}
-
-\begin{frame}{Ethics, Privacy and Risks}
-  \begin{itemize}
-    \item Privacy: PII masking before inference and logging.
-    \item Ethics: false positives and false negatives can both cause harm.
-    \item Explainability: evidence and trust score improve transparency.
-    \item Misuse risk: over-reliance on automated output without human review.
-  \end{itemize}
-  \begin{block}{Mitigation}
-    Use \texttt{UNCERTAIN} state and human escalation for ambiguous cases.
-  \end{block}
-\end{frame}
-
-\begin{frame}{Key Takeaways and Future Work}
-  \begin{itemize}
-    \item Built an end-to-end NLP system aligned with production-style requirements.
-    \item Combined strong modeling performance with deployability and agentic reasoning.
-    \item Next steps: stronger stance modeling, broader robustness tests, and tighter MLOps automation.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}{Q\&A}
+  \vspace{0.5em}
   \centering
-  \Large Thank you
-
-  \vspace{0.8em}
-  \normalsize Questions and feedback
+  \Large Q\&A
 \end{frame}
 
 \end{document}

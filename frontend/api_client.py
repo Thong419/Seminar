@@ -9,11 +9,12 @@ import requests
 from frontend.config import FrontendConfig
 
 
-@dataclass(frozen=True, slots=True)
 class APIError(Exception):
-    message: str
-    code: str = "backend_error"
-    status_code: int = 500
+    def __init__(self, message: str, code: str = "backend_error", status_code: int = 500) -> None:
+        super().__init__(message)
+        self.message = message
+        self.code = code
+        self.status_code = status_code
 
 
 class APIClient:

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import contextlib
 from dataclasses import dataclass
 
 import requests
@@ -62,3 +63,23 @@ def test_api_client_raises_structured_error_on_backend_error(monkeypatch) -> Non
         assert exc.status_code == 503
     else:  # pragma: no cover - defensive assertion
         raise AssertionError("APIError was not raised")
+
+
+def test_api_error_allows_traceback_assignment_in_context_manager() -> None:
+    @contextlib.contextmanager
+    def fake_spinner():
+        try:
+            yield
+        except Exception as exc:
+            exc.__traceback__ = exc.__traceback__
+            raise
+
+    try:
+        with fake_spinner():
+            raise APIError("backend timeout", code="timeout", status_code=504)
+    except APIError as exc:
+        assert exc.code == "timeout"
+        assert exc.status_code == 504
+        assert exc.message == "backend timeout"
+    else:  # pragma: no cover - defensive assertion
+        raise AssertionError("APIError was not re-raised")

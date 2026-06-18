@@ -12,7 +12,7 @@ class DummySearchClient:
                 title="Reuters verifies claim",
                 url="https://example.com/reuters",
                 source="Reuters",
-                snippet="Reuters verifies the article claim.",
+                snippet="Reuters reports early research about a potential miracle cancer cure and verifies the scientific claim details.",
                 provider_relevance=0.9,
             )
         ]

@@ -12,6 +12,9 @@ providers:
 thresholds:
   min_trust_score: 0.5
   min_relevance_score: 0.35
+  min_semantic_similarity: 0.08
+  min_entity_overlap: 0.20
+  min_claim_coverage: 0.30
   top_k: 5
 trust_scores:
   Reuters: 1.0

@@ -1,34 +1,34 @@
 [
   {
-    "token": "Mars",
+    "token": "decisions",
     "importance": 1.0
   },
   {
-    "token": "on",
+    "token": "security",
+    "importance": 0.983333
+  },
+  {
+    "token": "national",
+    "importance": 0.966667
+  },
+  {
+    "token": "and",
     "importance": 0.95
   },
   {
-    "token": "ater",
+    "token": "policy",
+    "importance": 0.933333
+  },
+  {
+    "token": "foreign",
+    "importance": 0.916667
+  },
+  {
+    "token": "of",
     "importance": 0.9
   },
   {
-    "token": "Cr",
-    "importance": 0.85
-  },
-  {
-    "token": "zero",
-    "importance": 0.8
-  },
-  {
-    "token": "Je",
-    "importance": 0.75
-  },
-  {
-    "token": "from",
-    "importance": 0.7
-  },
-  {
-    "token": "samples",
-    "importance": 0.65
+    "token": "coordination",
+    "importance": 0.883333
   }
 ]

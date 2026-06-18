@@ -14,7 +14,7 @@ import yaml
 @dataclass(frozen=True, slots=True)
 class FrontendConfig:
     api_url: str = "http://localhost:8000"
-    timeout_seconds: float = 30.0
+    timeout_seconds: float = 45.0
     app_title: str = "Fake News & Misinformation Detection System"
     model_config_path: Path = Path("configs/model.yaml")
     dataset_config_path: Path = Path("configs/dataset.yaml")

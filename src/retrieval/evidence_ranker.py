@@ -20,6 +20,9 @@ class RankConfig:
     provider_relevance_weight: float = 0.2
     min_trust_score: float = 0.5
     min_relevance_score: float = 0.35
+    min_semantic_similarity: float = 0.08
+    min_entity_overlap: float = 0.20
+    min_claim_coverage: float = 0.30
     top_k: int = 5
 
 
@@ -60,6 +63,9 @@ def load_rank_config(path: Path) -> RankConfig:
         provider_relevance_weight=float(weights.get("provider_relevance", RankConfig.provider_relevance_weight)),
         min_trust_score=float(thresholds.get("min_trust_score", RankConfig.min_trust_score)),
         min_relevance_score=float(thresholds.get("min_relevance_score", RankConfig.min_relevance_score)),
+        min_semantic_similarity=float(thresholds.get("min_semantic_similarity", RankConfig.min_semantic_similarity)),
+        min_entity_overlap=float(thresholds.get("min_entity_overlap", RankConfig.min_entity_overlap)),
+        min_claim_coverage=float(thresholds.get("min_claim_coverage", RankConfig.min_claim_coverage)),
         top_k=int(thresholds.get("top_k", RankConfig.top_k)),
     )
 

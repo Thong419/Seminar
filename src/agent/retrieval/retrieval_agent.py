@@ -18,6 +18,8 @@ class RetrievalBundle:
     claim: str
     keywords: list[str]
     queries: list[str]
+    accepted_evidence: list[dict[str, object]] | None = None
+    rejected_evidence: list[dict[str, object]] | None = None
 
     def combined(self) -> list[EvidenceItem]:
         return self.evidence
@@ -31,8 +33,16 @@ class RetrievalAgent:
         document_fetcher: DocumentFetcher | None = None,
     ) -> None:
         self.retrieval_config_path = Path(retrieval_config_path)
-        self.search_client = search_client or self._default_search_client()
-        self.document_fetcher = document_fetcher or DocumentFetcher()
+        retrieval_mode = os.getenv("RETRIEVAL_MODE", "live").strip().lower()
+        if retrieval_mode == "demo" and search_client is None and document_fetcher is None:
+            from src.retrieval.demo_provider import build_demo_retrieval_components
+
+            demo_search_client, demo_document_fetcher = build_demo_retrieval_components()
+            self.search_client = demo_search_client
+            self.document_fetcher = demo_document_fetcher
+        else:
+            self.search_client = search_client or self._default_search_client()
+            self.document_fetcher = document_fetcher or DocumentFetcher()
         self.pipeline = EvidenceRetrievalPipeline(
             search_client=self.search_client,
             document_fetcher=self.document_fetcher,
@@ -45,8 +55,8 @@ class RetrievalAgent:
             return TavilySearchClient(api_url="https://api.tavily.com/search", api_key=api_key)
         return HybridSearchClient(
             [
-                WikipediaHtmlSearchClient(),
                 BingHtmlSearchClient(),
+                WikipediaHtmlSearchClient(),
             ]
         )
 
@@ -72,4 +82,6 @@ class RetrievalAgent:
             claim=bundle.claim,
             keywords=bundle.keywords,
             queries=bundle.queries,
+            accepted_evidence=list(getattr(bundle, "accepted_evidence", []) or []),
+            rejected_evidence=list(getattr(bundle, "rejected_evidence", []) or []),
         )

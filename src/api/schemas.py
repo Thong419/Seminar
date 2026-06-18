@@ -113,6 +113,8 @@ class AgentResponse(BaseModel):
     contradiction_score: float = Field(ge=0.0, le=1.0, description="Evidence contradiction score")
     source_credibility_score: float = Field(ge=0.0, le=1.0, description="Average source credibility score")
     evidence_quality_score: float = Field(ge=0.0, le=1.0, description="Overall evidence quality score")
+    accepted_evidence: list[dict[str, Any]] = Field(default_factory=list, description="Accepted evidence audit entries")
+    rejected_evidence: list[dict[str, Any]] = Field(default_factory=list, description="Rejected evidence audit entries")
     sources: list[dict[str, Any]] = Field(description="Retrieved evidence sources")
     trace: dict[str, Any] | None = Field(default=None, description="Serialized agent execution trace")
 

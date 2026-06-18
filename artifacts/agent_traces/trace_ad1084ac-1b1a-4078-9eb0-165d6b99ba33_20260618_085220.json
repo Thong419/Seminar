@@ -1,0 +1,81 @@
+{
+  "request_id": "ad1084ac-1b1a-4078-9eb0-165d6b99ba33",
+  "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from the National Security Council on Wednesday. The White House said the change was part of a routine restructuring to improve coordination of foreign policy and national security decisions.",
+  "tool_traces": [
+    {
+      "tool_name": "classifier",
+      "input_data": {
+        "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from th"
+      },
+      "output_data": {
+        "label": "real",
+        "confidence": 0.9994603991508484
+      },
+      "execution_time_ms": 123.10290336608887,
+      "error": null,
+      "timestamp": "2026-06-18T08:51:28.888521"
+    },
+    {
+      "tool_name": "evidence",
+      "input_data": {
+        "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from th"
+      },
+      "output_data": {
+        "evidence_found": false,
+        "num_sources": 0,
+        "conflict_flag": false,
+        "support_score": 0.0
+      },
+      "execution_time_ms": 50271.21162414551,
+      "error": null,
+      "timestamp": "2026-06-18T08:52:19.159733"
+    },
+    {
+      "tool_name": "decision",
+      "input_data": {
+        "classification": {
+          "label": "real",
+          "confidence": 0.9994603991508484
+        },
+        "evidence_found": false
+      },
+      "output_data": {
+        "trust_score": 0.8495413392782211,
+        "decision_reason": "No external evidence found. Relying solely on classifier (confidence=1.00). Review state forced to UNCERTAIN.",
+        "risk_level": "medium",
+        "support_count": 0,
+        "refute_count": 0,
+        "neutral_count": 0,
+        "support_score": 0.0,
+        "contradiction_score": 0.0,
+        "source_credibility_score": 0.0,
+        "evidence_quality_score": 0.0,
+        "conflict_flag": false,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 0.0,
+      "error": null,
+      "timestamp": "2026-06-18T08:52:19.159733"
+    },
+    {
+      "tool_name": "explainability",
+      "input_data": {
+        "prediction": "real",
+        "confidence": 0.9994603991508484
+      },
+      "output_data": {
+        "explanation_length": 384,
+        "num_tokens": 8,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 999.4566440582275,
+      "error": null,
+      "timestamp": "2026-06-18T08:52:20.159190"
+    }
+  ],
+  "final_trust_score": 0.8495413392782211,
+  "final_decision": "real",
+  "total_execution_time_ms": 51393.771171569824,
+  "timestamp_start": "2026-06-18T08:51:28.765418",
+  "timestamp_end": "2026-06-18T08:52:20.159190"
+}

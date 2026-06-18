@@ -1,0 +1,81 @@
+{
+  "request_id": "0ddb2e18-473a-4c2e-b3c8-eeca47a1ef5c",
+  "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from the National Security Council on Wednesday. The White House said the change was part of a routine restructuring to improve coordination of foreign policy and national security decisions.",
+  "tool_traces": [
+    {
+      "tool_name": "classifier",
+      "input_data": {
+        "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from th"
+      },
+      "output_data": {
+        "label": "real",
+        "confidence": 0.9994603991508484
+      },
+      "execution_time_ms": 122.79891967773438,
+      "error": null,
+      "timestamp": "2026-06-18T08:38:00.461668"
+    },
+    {
+      "tool_name": "evidence",
+      "input_data": {
+        "article_text": "WASHINGTON (Reuters) - U.S. President Donald Trump removed his chief strategist Steve Bannon from th"
+      },
+      "output_data": {
+        "evidence_found": true,
+        "num_sources": 5,
+        "conflict_flag": true,
+        "support_score": 0.0
+      },
+      "execution_time_ms": 25779.009103775024,
+      "error": null,
+      "timestamp": "2026-06-18T08:38:26.240677"
+    },
+    {
+      "tool_name": "decision",
+      "input_data": {
+        "classification": {
+          "label": "real",
+          "confidence": 0.9994603991508484
+        },
+        "evidence_found": true
+      },
+      "output_data": {
+        "trust_score": 0.4563264381711522,
+        "decision_reason": "Classifier: REAL (confidence=1.00). Evidence: 5 sources retrieved (support=0, refute=5, neutral=0). Source credibility=0.50. Sources refuting the claim: Donald Trump and fascism, False or misleading statements by Donald Trump, Rhetoric of Donald Trump. Evidence conflicts with classifier label. Evidence stances disagree with the classifier label. Human review required (support_score=0.00, contradiction_score=0.43).",
+        "risk_level": "high",
+        "support_count": 0,
+        "refute_count": 5,
+        "neutral_count": 0,
+        "support_score": 0.0,
+        "contradiction_score": 0.43457721489187195,
+        "source_credibility_score": 0.5,
+        "evidence_quality_score": 0.6698048684116332,
+        "conflict_flag": true,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 0.0,
+      "error": null,
+      "timestamp": "2026-06-18T08:38:26.241678"
+    },
+    {
+      "tool_name": "explainability",
+      "input_data": {
+        "prediction": "real",
+        "confidence": 0.9994603991508484
+      },
+      "output_data": {
+        "explanation_length": 604,
+        "num_tokens": 8,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 127.5167465209961,
+      "error": null,
+      "timestamp": "2026-06-18T08:38:26.369194"
+    }
+  ],
+  "final_trust_score": 0.4563264381711522,
+  "final_decision": "real",
+  "total_execution_time_ms": 26032.325267791748,
+  "timestamp_start": "2026-06-18T08:38:00.336869",
+  "timestamp_end": "2026-06-18T08:38:26.369194"
+}

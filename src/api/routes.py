@@ -239,6 +239,8 @@ def agent(
         contradiction_score=result.contradiction_score,
         source_credibility_score=result.source_credibility_score,
         evidence_quality_score=result.evidence_quality_score,
+        accepted_evidence=getattr(result, "accepted_evidence", []),
+        rejected_evidence=getattr(result, "rejected_evidence", []),
         sources=result.sources,
         trace=result.trace.to_dict() if result.trace else None,
     )

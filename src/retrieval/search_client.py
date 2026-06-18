@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from html import unescape
 from urllib.parse import parse_qs, urlparse
 from typing import Protocol
+import re
 import os
 
 import requests
@@ -36,6 +37,10 @@ class WikipediaHtmlSearchClient:
 
     def search(self, query: str, limit: int = 5) -> list[SearchResult]:
         if not query.strip():
+            return []
+        # This client cannot honor arbitrary site: filters. Return no results
+        # for domain-targeted queries so upstream clients can enforce domain constraints.
+        if "site:" in query.lower():
             return []
 
         response = requests.get(
@@ -83,9 +88,16 @@ class BingHtmlSearchClient:
         if not query.strip():
             return []
 
+        allowed_domains = _extract_site_domains(query)
+
         response = requests.get(
             "https://www.bing.com/search",
-            params={"q": query},
+            params={
+                "q": query,
+                "setlang": "en-US",
+                "cc": "US",
+                "mkt": "en-US",
+            },
             timeout=self.timeout_seconds,
             headers={"User-Agent": self.user_agent},
         )
@@ -101,6 +113,8 @@ class BingHtmlSearchClient:
                 continue
 
             url = _unwrap_bing_redirect(anchor.get("href", ""))
+            if allowed_domains and not _url_matches_allowed_domains(url, allowed_domains):
+                continue
             title = _compact_whitespace(anchor.get_text(" ", strip=True))
             snippet_text = _compact_whitespace(unescape(snippet.get_text(" ", strip=True) if snippet else ""))
             results.append(
@@ -175,6 +189,51 @@ class TavilySearchClient:
         return results
 
 
+class NasaWpSearchClient:
+    def __init__(self, timeout_seconds: int = 15, user_agent: str = "FakeNewsDetectionBot/1.0") -> None:
+        self.timeout_seconds = timeout_seconds
+        self.user_agent = user_agent
+
+    def search(self, query: str, limit: int = 5) -> list[SearchResult]:
+        cleaned_query = _strip_site_filters(query)
+        if not cleaned_query:
+            return []
+
+        response = requests.get(
+            "https://www.nasa.gov/wp-json/wp/v2/posts",
+            params={"search": cleaned_query, "per_page": limit},
+            timeout=self.timeout_seconds,
+            headers={"User-Agent": self.user_agent},
+        )
+        response.raise_for_status()
+
+        payload = response.json()
+        if not isinstance(payload, list):
+            return []
+
+        results: list[SearchResult] = []
+        for rank, item in enumerate(payload[:limit]):
+            title_obj = item.get("title", {}) if isinstance(item, dict) else {}
+            title = _compact_whitespace(unescape(str(title_obj.get("rendered", ""))))
+            url = str(item.get("link", ""))
+            excerpt_obj = item.get("excerpt", {}) if isinstance(item, dict) else {}
+            snippet = _compact_whitespace(unescape(str(excerpt_obj.get("rendered", ""))))
+            if not title or not url:
+                continue
+            results.append(
+                SearchResult(
+                    title=title,
+                    url=url,
+                    source="nasa.gov",
+                    snippet=snippet,
+                    provider_relevance=max(0.20, 1.0 - (rank * 0.10)),
+                    query=query,
+                    provider="nasa_wp",
+                )
+            )
+        return results
+
+
 class SerpApiSearchClient:
     def search(self, query: str, limit: int = 5) -> list[SearchResult]:
         raise NotImplementedError("SerpAPI support will be added later.")
@@ -225,3 +284,20 @@ def _source_from_url(url: str) -> str:
 
 def _compact_whitespace(text: str) -> str:
     return " ".join(text.split())
+
+
+def _extract_site_domains(query: str) -> set[str]:
+    matches = re.findall(r"site:([A-Za-z0-9.-]+)", query)
+    return {match.lower().removeprefix("www.") for match in matches}
+
+
+def _url_matches_allowed_domains(url: str, allowed_domains: set[str]) -> bool:
+    host = _source_from_url(url)
+    return any(host == domain or host.endswith(f".{domain}") for domain in allowed_domains)
+
+
+def _strip_site_filters(query: str) -> str:
+    cleaned = re.sub(r"\bsite:[A-Za-z0-9.-]+", " ", query)
+    cleaned = re.sub(r"\bOR\b", " ", cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r"\s+", " ", cleaned)
+    return cleaned.strip()

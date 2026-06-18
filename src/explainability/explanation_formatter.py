@@ -105,16 +105,83 @@ def format_explanation(
     weights: TrustScoreWeights = TrustScoreWeights(),
     trust_score: float | None = None,
 ) -> UnifiedExplanation:
+    """Format a structured explanation with explicit support/refute/uncertainty reasoning.
+
+    Improvements over previous version:
+    - Explicitly states which sources support and which refute.
+    - Explains why the result is UNCERTAIN when applicable.
+    - Does not combine irrelevant neutral sources into the support narrative.
+    """
     if trust_score is None:
         trust_score = calculate_trust_score(confidence, evidence_score, source_trust, weights) / 100.0
     trust_score = max(0.0, min(1.0, float(trust_score)))
+
     evidence_summary = build_evidence_summary(evidence)
-    final_explanation = (
-        f"The article was classified as {prediction} with confidence {confidence:.2f}. "
-        f"Trust score: {trust_score:.2%}. "
-        f"{evidence_summary} "
-        f"The strongest token signals were {', '.join(item['token'] for item in important_tokens[:5]) or 'not available'}."
-    )
+
+    # Partition evidence by stance
+    support_items = [e for e in evidence if str(getattr(e, "stance", "")).lower() == "support"]
+    refute_items = [e for e in evidence if str(getattr(e, "stance", "")).lower() in {"refute", "contradict"}]
+    neutral_items = [e for e in evidence if str(getattr(e, "stance", "")).lower() == "neutral"]
+
+    # Build the explanation narrative
+    parts: list[str] = [
+        f"The article was classified as {prediction.upper()} with confidence {confidence:.1%}."
+    ]
+
+    if support_items:
+        titles = ", ".join(f"\"{e.title}\"" for e in support_items[:3])
+        sources = ", ".join({e.source for e in support_items[:3]})
+        parts.append(
+            f"Evidence supporting this classification: {titles} "
+            f"(from {sources}). "
+            f"These sources confirm or align with the claim."
+        )
+
+    if refute_items:
+        titles = ", ".join(f"\"{e.title}\"" for e in refute_items[:3])
+        sources = ", ".join({e.source for e in refute_items[:3]})
+        parts.append(
+            f"Evidence refuting or contradicting the claim: {titles} "
+            f"(from {sources}). "
+            f"These sources dispute or debunk the core assertion."
+        )
+
+    if neutral_items and not support_items and not refute_items:
+        titles = ", ".join(f"\"{e.title}\"" for e in neutral_items[:3])
+        parts.append(
+            f"Retrieved sources ({titles}) discuss the topic but do not explicitly "
+            f"confirm or refute the specific claim. "
+            f"They provide background context only."
+        )
+
+    # Uncertainty explanation
+    if prediction.lower() == "uncertain" or (trust_score < 0.55):
+        if support_items and refute_items:
+            parts.append(
+                "The result is UNCERTAIN because evidence is mixed: "
+                f"{len(support_items)} source(s) support and {len(refute_items)} source(s) refute the claim. "
+                "Human review is recommended."
+            )
+        elif not support_items and not refute_items:
+            parts.append(
+                "The result is UNCERTAIN because no evidence explicitly confirms or refutes the claim. "
+                "Retrieved sources are topically related but do not address the specific assertion."
+            )
+        elif confidence < 0.72:
+            parts.append(
+                f"The result is UNCERTAIN because classifier confidence ({confidence:.1%}) "
+                "is below the required threshold for an automatic decision."
+            )
+
+    # Token signals
+    token_signal = ", ".join(str(item.get("token", "")) for item in important_tokens[:5])
+    if token_signal:
+        parts.append(f"Key linguistic signals: {token_signal}.")
+
+    parts.append(f"Overall trust score: {trust_score:.1%}.")
+
+    final_explanation = " ".join(parts)
+
     return UnifiedExplanation(
         prediction=prediction,
         confidence=confidence,

@@ -1,10 +1,10 @@
 {
-  "total_agent_requests": 4,
-  "evidence_retrieval_success_rate": 1.0,
+  "total_agent_requests": 2,
+  "evidence_retrieval_success_rate": 0.5,
   "conflict_rate": 0.5,
-  "uncertain_rate": 0.5,
-  "average_confidence": 0.945,
-  "average_trust_score": 0.662,
-  "average_response_time_ms": 0.0,
-  "evidence_source_count": 1.0
+  "uncertain_rate": 1.0,
+  "average_confidence": 0.9990560412406921,
+  "average_trust_score": 0.6918014033373681,
+  "average_response_time_ms": 12935.593366622925,
+  "evidence_source_count": 1.5
 }

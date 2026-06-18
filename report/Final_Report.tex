@@ -131,10 +131,11 @@ RoBERTa & 0.9991 & 0.9987 & 0.9997 & 0.9992 \\
 As shown in Table~\ref{tab:model-results}, RoBERTa outperforms the baseline across all reported metrics.
 
 \subsection{Error Analysis and Trade-offs}
-Observed failure modes include ambiguous claims, weak-evidence scenarios, and noisy out-of-domain phrasing. The key trade-offs are:
+Observed failure modes include ambiguous claims, weak-evidence scenarios, and noisy out-of-domain phrasing. In the latest live retrieval hardening pass, the system was improved with claim-centric queries, domain-aware fallback, and direct NASA source recovery for science claims; however, external search providers can still miss the intended authoritative page or return noisy concept pages before the fallback path activates. The key trade-offs are:
 \begin{itemize}[leftmargin=1.2em]
   \item Accuracy vs speed: transformer is stronger but heavier than baseline.
   \item Complexity vs maintainability: agent-enabled pipeline is more useful but requires stronger integration testing and monitoring.
+  \item Retrieval robustness vs dependency on external search providers: more aggressive fallback improves recall but increases integration complexity.
 \end{itemize}
 
 \section{Deployment Architecture and Inference Pipeline}
@@ -178,6 +179,8 @@ Figure~\ref{fig:system-architecture} summarizes the deployed system.
 \subsection{Deployment Constraints and Limitations}
 Main constraints are free-tier resource limits, model size, and dependence on external evidence sources. These limitations are documented and reflected in risk management.
 
+The live retrieval layer is intentionally conservative: when search quality is weak, the system may return \texttt{UNCERTAIN} rather than fabricate evidence. This is preferable for seminar evaluation, but it means some correct claims can still be misclassified or under-supported if the classifier is overconfident or the search provider is noisy.
+
 \section{Agentic AI Component}
 \subsection{Agent Architecture}
 The project includes explicit multi-step agentic behavior through a controller that coordinates classifier, evidence retrieval, decision logic, and explanation generation.
@@ -207,7 +210,7 @@ Figure~\ref{fig:agent-flow} shows the implemented sequence.
 \end{figure}
 
 \subsection{Example Interaction Behavior}
-The agent can emit an \texttt{UNCERTAIN} review state when confidence is low or evidence conflicts with prediction. This demonstrates decision-making based on intermediate outputs, not single-pass labeling.
+The agent can emit an \texttt{UNCERTAIN} review state when confidence is low or evidence conflicts with prediction. This demonstrates decision-making based on intermediate outputs, not single-pass labeling. Recent runtime traces also show why this matters: a science claim may now recover authoritative NASA evidence after fallback, while noisy claim wording can still initially attract irrelevant pages before the retrieval gate filters them out.
 
 \section{Continual Learning and Monitoring Strategy}
 The project includes a practical monitoring design and a conceptual continual-learning plan.

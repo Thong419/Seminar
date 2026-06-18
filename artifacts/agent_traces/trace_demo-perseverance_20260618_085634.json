@@ -1,0 +1,81 @@
+{
+  "request_id": "demo-perseverance",
+  "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars.",
+  "tool_traces": [
+    {
+      "tool_name": "classifier",
+      "input_data": {
+        "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars."
+      },
+      "output_data": {
+        "label": "fake",
+        "confidence": 0.9986516833305359
+      },
+      "execution_time_ms": 11.568784713745117,
+      "error": null,
+      "timestamp": "2026-06-18T08:56:21.484916"
+    },
+    {
+      "tool_name": "evidence",
+      "input_data": {
+        "article_text": "NASA's Perseverance rover successfully collected rock samples from Jezero Crater on Mars."
+      },
+      "output_data": {
+        "evidence_found": true,
+        "num_sources": 5,
+        "conflict_flag": false,
+        "support_score": 0.47532637339418893
+      },
+      "execution_time_ms": 12897.453308105469,
+      "error": null,
+      "timestamp": "2026-06-18T08:56:34.382369"
+    },
+    {
+      "tool_name": "decision",
+      "input_data": {
+        "classification": {
+          "label": "fake",
+          "confidence": 0.9986516833305359
+        },
+        "evidence_found": true
+      },
+      "output_data": {
+        "trust_score": 0.4487280359927954,
+        "decision_reason": "Classifier: FAKE (confidence=1.00). Evidence: 5 sources retrieved (support=5, refute=0, neutral=0). Source credibility=0.48. Sources supporting the claim: Jezero ( crater ), Timeline of Mars 2020, NASA -ESA Mars Sample Return. Evidence conflicts with classifier label. Evidence stances disagree with the classifier label. Human review required (support_score=0.48, contradiction_score=0.00).",
+        "risk_level": "high",
+        "support_count": 5,
+        "refute_count": 0,
+        "neutral_count": 0,
+        "support_score": 0.47532637339418893,
+        "contradiction_score": 0.0,
+        "source_credibility_score": 0.484,
+        "evidence_quality_score": 0.6863967877203949,
+        "conflict_flag": true,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 0.0,
+      "error": null,
+      "timestamp": "2026-06-18T08:56:34.382369"
+    },
+    {
+      "tool_name": "explainability",
+      "input_data": {
+        "prediction": "fake",
+        "confidence": 0.9986516833305359
+      },
+      "output_data": {
+        "explanation_length": 548,
+        "num_tokens": 8,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 63.75718116760254,
+      "error": null,
+      "timestamp": "2026-06-18T08:56:34.446126"
+    }
+  ],
+  "final_trust_score": 0.4487280359927954,
+  "final_decision": "fake",
+  "total_execution_time_ms": 12972.779273986816,
+  "timestamp_start": "2026-06-18T08:56:21.473347",
+  "timestamp_end": "2026-06-18T08:56:34.446126"
+}
