@@ -1,10 +1,10 @@
 {
-  "total_agent_requests": 2,
-  "evidence_retrieval_success_rate": 0.5,
-  "conflict_rate": 0.5,
+  "total_agent_requests": 3,
+  "evidence_retrieval_success_rate": 0.6666666666666666,
+  "conflict_rate": 0.6666666666666666,
   "uncertain_rate": 1.0,
-  "average_confidence": 0.9990560412406921,
-  "average_trust_score": 0.6918014033373681,
-  "average_response_time_ms": 12935.593366622925,
-  "evidence_source_count": 1.5
+  "average_confidence": 0.9992892146110535,
+  "average_trust_score": 0.6370791928284628,
+  "average_response_time_ms": 25043.711344401043,
+  "evidence_source_count": 1.3333333333333333
 }

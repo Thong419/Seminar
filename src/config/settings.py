@@ -24,6 +24,7 @@ class AppSettings:
     streamlit_port: int = 8501
     model_name: str = "roberta-base"
     model_dir: Path = Path("models/roberta")
+    model_reference: str = "models/roberta"
     baseline_dir: Path = Path("models/baseline")
     mlflow_tracking_uri: str = "http://localhost:5000"
 
@@ -42,6 +43,7 @@ def get_settings() -> AppSettings:
         streamlit_port=int(os.getenv("STREAMLIT_PORT", str(defaults.streamlit_port))),
         model_name=os.getenv("MODEL_NAME", defaults.model_name),
         model_dir=Path(os.getenv("MODEL_DIR", str(defaults.model_dir))),
+        model_reference=os.getenv("MODEL_REFERENCE", os.getenv("MODEL_DIR", defaults.model_reference)),
         baseline_dir=Path(os.getenv("BASELINE_DIR", str(defaults.baseline_dir))),
         mlflow_tracking_uri=os.getenv("MLFLOW_TRACKING_URI", defaults.mlflow_tracking_uri),
     )

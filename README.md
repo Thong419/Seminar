@@ -56,6 +56,18 @@ streamlit run frontend/app.py --server.address 0.0.0.0 --server.port 8501
 docker compose up --build
 ```
 
+### Render deployment note
+
+The backend now loads the classifier from `MODEL_REFERENCE` when deployed.
+For Render, set:
+
+```bash
+MODEL_REFERENCE=Thong419/fake-news-roberta
+MODEL_DIR=models/roberta
+```
+
+`MODEL_DIR` remains the local artifact path used for training and repo layout, while `MODEL_REFERENCE` can point to a Hugging Face model id.
+
 ## API Examples
 
 ### Health

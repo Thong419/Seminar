@@ -19,3 +19,5 @@ services:
         value: roberta-base
       - key: MODEL_DIR
         value: models/roberta
+      - key: MODEL_REFERENCE
+        value: Thong419/fake-news-roberta

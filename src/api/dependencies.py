@@ -46,7 +46,7 @@ def get_predictor() -> Predictor:
     try:
         from src.inference.predictor import Predictor
 
-        return Predictor(model_dir=settings.model_dir, model_config=model_config)
+        return Predictor(model_dir=settings.model_reference, model_config=model_config)
     except (FileNotFoundError, OSError, ValueError) as exc:
         raise _missing_model_http_exception(settings, exc) from exc
 
