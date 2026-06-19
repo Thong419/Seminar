@@ -47,7 +47,7 @@ _DOMAIN_SUFFIX_BY_CLAIM_TYPE: dict[str, list[str]] = {
         "verified source",
     ],
     "economic_claim": [
-        "site:imf.org OR site:worldbank.org OR site:bls.gov",
+        "site:federalreserve.gov OR site:imf.org OR site:worldbank.org OR site:bls.gov",
         "economic data",
         "official statistics",
     ],

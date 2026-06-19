@@ -1,0 +1,81 @@
+{
+  "request_id": "bbdb48d3-a17e-4335-a9e5-68b8c8dbbc16",
+  "article_text": "Scientists confirm that drinking warm salt water every morning can permanently cure all types of cancer within 3 days without any medical treatment.",
+  "tool_traces": [
+    {
+      "tool_name": "classifier",
+      "input_data": {
+        "article_text": "Scientists confirm that drinking warm salt water every morning can permanently cure all types of can"
+      },
+      "output_data": {
+        "label": "fake",
+        "confidence": 0.9996817111968994
+      },
+      "execution_time_ms": 94.2997932434082,
+      "error": null,
+      "timestamp": "2026-06-18T10:43:29.527213"
+    },
+    {
+      "tool_name": "evidence",
+      "input_data": {
+        "article_text": "Scientists confirm that drinking warm salt water every morning can permanently cure all types of can"
+      },
+      "output_data": {
+        "evidence_found": false,
+        "num_sources": 0,
+        "conflict_flag": false,
+        "support_score": 0.0
+      },
+      "execution_time_ms": 24054.81195449829,
+      "error": null,
+      "timestamp": "2026-06-18T10:43:53.583028"
+    },
+    {
+      "tool_name": "decision",
+      "input_data": {
+        "classification": {
+          "label": "fake",
+          "confidence": 0.9996817111968994
+        },
+        "evidence_found": false
+      },
+      "output_data": {
+        "trust_score": 0.8497294545173645,
+        "decision_reason": "No external evidence found. Relying solely on classifier (confidence=1.00). Review state forced to UNCERTAIN.",
+        "risk_level": "medium",
+        "support_count": 0,
+        "refute_count": 0,
+        "neutral_count": 0,
+        "support_score": 0.0,
+        "contradiction_score": 0.0,
+        "source_credibility_score": 0.0,
+        "evidence_quality_score": 0.0,
+        "conflict_flag": false,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 0.0,
+      "error": null,
+      "timestamp": "2026-06-18T10:43:53.584025"
+    },
+    {
+      "tool_name": "explainability",
+      "input_data": {
+        "prediction": "fake",
+        "confidence": 0.9996817111968994
+      },
+      "output_data": {
+        "explanation_length": 381,
+        "num_tokens": 8,
+        "human_review_state": "UNCERTAIN"
+      },
+      "execution_time_ms": 111.85622215270996,
+      "error": null,
+      "timestamp": "2026-06-18T10:43:53.695881"
+    }
+  ],
+  "final_trust_score": 0.8497294545173645,
+  "final_decision": "fake",
+  "total_execution_time_ms": 24262.967824935913,
+  "timestamp_start": "2026-06-18T10:43:29.432914",
+  "timestamp_end": "2026-06-18T10:43:53.695881"
+}

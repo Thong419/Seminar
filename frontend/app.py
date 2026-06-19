@@ -161,6 +161,46 @@ def _render_evidence_cards(items: list[dict[str, object]]) -> None:
                     st.write(content)
 
 
+def _render_rejected_evidence(items: list[dict[str, object]]) -> None:
+    st.markdown("### Rejected Evidence")
+    if not items:
+        st.caption("No rejected evidence records.")
+        return
+
+    for item in items[:12]:
+        title = str(item.get("title", "Untitled evidence"))
+        source = str(item.get("source", "Unknown"))
+        url = str(item.get("url", "")).strip()
+        reason = str(item.get("rejection_reason", "unknown"))
+        semantic = item.get("semantic_score", item.get("adjusted_score", 0.0))
+        coverage = item.get("coverage_score", item.get("claim_coverage_score", 0.0))
+        credibility = item.get("source_credibility", 0.0)
+
+        with st.container(border=True):
+            st.markdown(f"**{title}**")
+            st.caption(f"Source: {source}")
+            if url:
+                st.write(url)
+
+            c1, c2, c3, c4 = st.columns(4)
+            with c1:
+                st.write("**Reason**")
+                st.write(reason)
+            with c2:
+                st.write("**Semantic**")
+                st.write(f"{float(semantic):.3f}" if isinstance(semantic, (int, float)) else str(semantic))
+            with c3:
+                st.write("**Coverage**")
+                st.write(f"{float(coverage):.3f}" if isinstance(coverage, (int, float)) else str(coverage))
+            with c4:
+                st.write("**Credibility**")
+                st.write(f"{float(credibility):.2f}" if isinstance(credibility, (int, float)) else str(credibility))
+
+            query_used = str(item.get("query_used", "")).strip()
+            if query_used:
+                st.caption(f"Query: {query_used}")
+
+
 def main() -> None:
     config = get_frontend_config()
     api_client = APIClient(config)
@@ -296,6 +336,7 @@ def main() -> None:
                 st.write(agent_summary["Evidence Summary"])
 
             _render_evidence_cards(render_evidence_cards(result.get("sources", []) or []))
+            _render_rejected_evidence(list(result.get("rejected_evidence", []) or []))
 
             _render_trace_timeline(result.get("trace") if isinstance(result.get("trace"), dict) else None, agent_summary["Trace Steps"], agent_summary["Total Execution Time"])
 

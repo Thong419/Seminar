@@ -1,34 +1,34 @@
 [
   {
-    "token": "regulations",
+    "token": "level",
     "importance": 1.0
   },
   {
-    "token": "tax",
-    "importance": 0.927273
+    "token": "current",
+    "importance": 0.938462
   },
   {
-    "token": "changes",
-    "importance": 0.854545
+    "token": "the",
+    "importance": 0.876923
   },
   {
-    "token": "that",
-    "importance": 0.781818
+    "token": "at",
+    "importance": 0.815385
   },
   {
-    "token": "today",
-    "importance": 0.709091
+    "token": "rates",
+    "importance": 0.753846
   },
   {
-    "token": "policy",
-    "importance": 0.636364
+    "token": "interest",
+    "importance": 0.692308
   },
   {
-    "token": "new",
-    "importance": 0.563636
+    "token": "maintain",
+    "importance": 0.630769
   },
   {
-    "token": "a",
-    "importance": 0.490909
+    "token": "would",
+    "importance": 0.569231
   }
 ]
